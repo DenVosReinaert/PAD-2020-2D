@@ -13,7 +13,7 @@ public class Interscene : MonoBehaviour {
         if (instance == null) {
             instance = this;
             DontDestroyOnLoad(this);
-            pipes = new Vector3[GameObject.Find("Pipes").transform.childCount];
+            pipes = new Vector3[3];
         } else if (instance != this) {
             Destroy(this);
         }
