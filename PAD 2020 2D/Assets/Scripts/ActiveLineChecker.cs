@@ -11,7 +11,9 @@ public class ActiveLineChecker : MonoBehaviour {
 
     public static Transform[] lines;
     public static GameObject activeLine;
-    private Dictionary<GameObject, KeyValuePair<float, float>> inputPoints;
+    private Dictionary<GameObject, string> formulas;
+
+    private GameObject inputText;
 
     void Awake() {
         lines = new Transform[transform.childCount];
@@ -19,9 +21,8 @@ public class ActiveLineChecker : MonoBehaviour {
             lines[i] = transform.GetChild(i);
         }
         activeLine = lines[0].gameObject;
-        inputPoints = BuildDictionary();
-        GameObject.Find("X").GetComponent<InputField>().text = "-7.1";
-        GameObject.Find("Y").GetComponent<InputField>().text = "3.1";
+        formulas = BuildDictionary();
+        inputText = GameObject.Find("Formule");
     }
 
     void Update() {
@@ -36,101 +37,84 @@ public class ActiveLineChecker : MonoBehaviour {
             }
         }
         if (Input.GetKeyDown(KeyCode.RightArrow)) { // go to next line to edit when enter key is pressed
-            nextLine();
+            NextLine();
         } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
-            previousLine();
+            PreviousLine();
         }
-        string xToParse = GameObject.Find("xText").GetComponent<Text>().text;
-        string yToParse = GameObject.Find("yText").GetComponent<Text>().text;
-        float x = 0;
-        float y = 0;
-        if (!String.IsNullOrEmpty(xToParse) && CanParse(xToParse)) {
-            x = ParseNumber(xToParse);
-        }
-        if (!String.IsNullOrEmpty(yToParse) && CanParse(yToParse)) {
-            y = ParseNumber(yToParse);
-        }
-        activeLine.GetComponent<LineRenderer>().SetPosition(1, new Vector2(x, y));
-        /*newFormula = inputText.GetComponent<Text>().text;
-        string lengthInput = GameObject.Find("LengthText").GetComponent<Text>().text;
-        float length = 0;
-        if (!String.IsNullOrEmpty(lengthInput) && CanParse(lengthInput)) {
-            length = ParseNumber(lengthInput);
-        }
+        string newFormula = inputText.GetComponent<Text>().text;
         // formula parsing for reading
         if (newFormula != "") {
             if (CanParseFormula(newFormula)) {
                 string[] calculation = ParseFormula(newFormula);
-                KeyValuePair<float, float> points = GetPoints(calculation, length);
-                Debug.Log(length + ", " + points.Key + " " + points.Value);
+                KeyValuePair<float, float> points = GetPoints(calculation);
+                Debug.Log(points.Key + " " + points.Value);
                 activeLine.GetComponent<LineRenderer>().SetPosition(1, new Vector2(points.Key, points.Value));
             } else {
                 Debug.Log("Invalid formula!");
             }
-        }*/
+        }
     }
 
-    private static Dictionary<GameObject, KeyValuePair<float, float>> BuildDictionary() {
-        Dictionary<GameObject, KeyValuePair<float, float>> returnItem = new Dictionary<GameObject, KeyValuePair<float, float>>();
+    private static Dictionary<GameObject, string> BuildDictionary() {
+        Dictionary<GameObject, string> returnItem = new Dictionary<GameObject, string>();
         for (int i = 0; i < lines.Length; i++) {
-            LineRenderer render = lines[i].gameObject.GetComponent<LineRenderer>();
-            returnItem.Add(lines[i].gameObject, new KeyValuePair<float, float>(render.GetPosition(1).x, render.GetPosition(1).y));
+            LineRenderer render = lines[i].GetComponent<LineRenderer>();
+            returnItem.Add(lines[i].gameObject, DrawLine.GetFormulaFromVector(render.GetPosition(0), render.GetPosition(1)));
         }
         return returnItem;
     }
 
-    void nextLine() { // method that handles going to next line
+    void NextLine() { // method that handles going to next line
         GameObject oldLine = activeLine.gameObject;
         if (activeLine == lines[0].gameObject) {
-            if (lines[1] != null) activeLine = lines[1].gameObject;
+            if (lines[1] != null) {
+                activeLine = lines[1].gameObject;
+            }
         } else if (activeLine == lines[1].gameObject) {
-            if (lines[2] != null) activeLine = lines[2].gameObject;
+            if (lines[2] != null) {
+                activeLine = lines[2].gameObject;
+            }
         } else if (activeLine == lines[2].gameObject) {
-            if (lines[3] != null) activeLine = lines[3].gameObject;
-        }
-        clearFields(oldLine, activeLine.gameObject);
-    }
-
-    void previousLine() { // method that handles going back to previous line
-        GameObject oldLine = activeLine.gameObject;
-        if (activeLine == lines[1].gameObject) {
-            if (lines[0] != null) activeLine = lines[0].gameObject;
-        } else if (activeLine == lines[2].gameObject) {
-            if (lines[1] != null) activeLine = lines[1].gameObject;
-        } else if (activeLine == lines[3].gameObject) {
-            if (lines[2] != null) activeLine = lines[2].gameObject;
-        }
-        clearFields(oldLine, activeLine.gameObject);
-    }
-
-    private void clearFields(GameObject oldLine, GameObject newLine) {
-        string inputX = GameObject.Find("xText").GetComponent<Text>().text;
-        string inputY = GameObject.Find("yText").GetComponent<Text>().text;
-        float x = 0;
-        float y = 0;
-        if (!String.IsNullOrEmpty(inputX) && CanParse(inputX)) {
-            x = ParseNumber(inputX);
-        }
-        if (!String.IsNullOrEmpty(inputY) && CanParse(inputY)) {
-            y = ParseNumber(inputY);
-        }
-        if (inputPoints.ContainsKey(oldLine)) {
-            inputPoints[oldLine] = new KeyValuePair<float, float>(x, y);
-        }
-        float newX = 0;
-        float newY = 0;
-        if (inputPoints.ContainsKey(newLine)) {
-            KeyValuePair<float, float> value = new KeyValuePair<float, float>();
-            if (inputPoints.TryGetValue(newLine, out value)) {
-                newX = value.Key;
-                newY = value.Value;
+            if (lines[3] != null) {
+                activeLine = lines[3].gameObject;
             }
         }
-        GameObject.Find("X").GetComponent<InputField>().text = newX.ToString();
-        GameObject.Find("Y").GetComponent<InputField>().text = newY.ToString();
+        ClearFields(oldLine, activeLine.gameObject);
     }
 
-    /*public bool CanParseFormula(string formula) { // see if formula contains only digits, an x or a math operator
+    void PreviousLine() { // method that handles going back to previous line
+        GameObject oldLine = activeLine.gameObject;
+        if (activeLine == lines[1].gameObject) {
+            if (lines[0] != null) {
+                activeLine = lines[0].gameObject;
+            }
+        } else if (activeLine == lines[2].gameObject) {
+            if (lines[1] != null) {
+                activeLine = lines[1].gameObject;
+            }
+        } else if (activeLine == lines[3].gameObject) {
+            if (lines[2] != null) {
+                activeLine = lines[2].gameObject;
+            }
+        }
+        ClearFields(oldLine, activeLine.gameObject);
+    }
+
+    private void ClearFields(GameObject oldLine, GameObject newLine) {
+        string input = inputText.GetComponent<Text>().text;
+        if (formulas.ContainsKey(oldLine) && !string.IsNullOrEmpty(input)) {
+            formulas[oldLine] = input;
+        }
+        string formula = "";
+        if (formulas.ContainsKey(newLine)) {
+            if (formulas.TryGetValue(newLine, out string value)) {
+                formula = value;
+            }
+        }
+        GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
+    }
+
+    public bool CanParseFormula(string formula) { // see if formula contains only digits, an x or a math operator
         foreach (char c in formula) {
             if ((c < '0' || c > '9') && (c != 'x' && c != 'X') && (c != '+' && c != '-') && c != ' ' && c != '.') { // if not any of these values, then its not a correct formula so return false
                 return false;
@@ -138,10 +122,12 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         if (formula.Length == 1) {
             char[] number = formula.ToCharArray();
-            if (number[0] < '0' || number[0] > '9') return false;
+            if (number[0] < '0' || number[0] > '9') {
+                return false;
+            }
         }
         return true;
-    }*/
+    }
 
     public bool CanParse(string number) {
         foreach (char c in number) {
@@ -151,14 +137,15 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         if (number.Length == 1) {
             char[] numbers = number.ToCharArray();
-            if (numbers[0] < '0' || numbers[0] > '9') return false;
+            if (numbers[0] < '0' || numbers[0] > '9') {
+                return false;
+            }
         }
-        if (number.IndexOf("-") > 0) return false;
-        return true;
+        return number.IndexOf("-") <= 0;
     }
 
-    /*public string[] ParseFormula(string formula) {
-        string[] content = new string[15]; // get the contents in the form or -1x, -, 3 when formula is -1x - 3
+    public string[] ParseFormula(string formula) {
+        string[] content; // get the contents in the form or -1x, -, 3 when formula is -1x - 3
         if (formula.Contains("*")) { // form: -1*x-3 or -1 * x - 3 or -1*x - 3
             if (formula.Contains(" * ")) {
                 formula.Replace(" * ", "");
@@ -209,7 +196,7 @@ public class ActiveLineChecker : MonoBehaviour {
             for (int i = 0; i < formule.Length; i++) {
                 if (formule[i] == 'x') {
                     sb.Append(formule[i]).Append(" ");
-                } else if ((formule[i] == '-' || formule[i] == '+') && i > 2) {
+                } else if ((formule[i] == '-' || formule[i] == '+') && i > 0) {
                     sb.Append(formule[i]).Append(" ");
                 } else {
                     sb.Append(formule[i]);
@@ -220,7 +207,7 @@ public class ActiveLineChecker : MonoBehaviour {
         return content;
     }
 
-    static KeyValuePair<float, float> GetPoints(string[] formula, float length) { // return in system: (x, y)
+    static KeyValuePair<float, float> GetPoints(string[] formula) { // return in system: (x, y)
         KeyValuePair<float, float> points;
         if (formula[0].Contains("x")) {
             formula[0] = formula[0].Replace("x", "");
@@ -229,23 +216,25 @@ public class ActiveLineChecker : MonoBehaviour {
         float a = ParseNumber(formula[0]);
         string mathOperator = "";
         float b = 0;
-        if (formula.Length > 2) { 
+        if (formula.Length > 2) {
             mathOperator = formula[1];
-            
-        } 
+
+        }
         if (formula.Length > 3) {
             b = ParseNumber(formula[2]);
         }
-        float ax = a * length;
-        float y = 0;
+
+        float x = GameObject.Find("Goal").GetComponent<SpriteRenderer>().bounds.max.x + 10;
+        float ax = a * x;
+        float y;
         if (mathOperator != "" && b != 0) {
             y = mathOperator == "-" ? ax - b : ax + b;
         } else {
             y = ax;
         }
-        points = new KeyValuePair<float, float>(length, y);
+        points = new KeyValuePair<float, float>(x, y);
         return points;
-    }*/
+    }
 
     private static float ParseNumber(string intToParse) {
         float parsed = 0;

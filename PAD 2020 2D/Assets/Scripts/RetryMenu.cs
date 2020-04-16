@@ -7,12 +7,12 @@ public class RetryMenu : MonoBehaviour {
     
     public void Retry() {
         SceneManager.LoadScene("Level");
-        Interscene.retryLevel = true;
+        Interscene.instance.retryLevel = true;
     }
 
     public void NextLevel() {
         SceneManager.LoadScene("Level");
-        Interscene.retryLevel = false;
+        Interscene.instance.retryLevel = false;
     }
        
     public void QuitGame()

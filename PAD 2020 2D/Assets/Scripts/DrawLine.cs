@@ -38,7 +38,9 @@ public class DrawLine : MonoBehaviour {
             string mathOperator = (startPoint > 0 ? " + " : " - "); // get the math operator for the equation depending on the value of startpoint (b)
             float roundedStart = Mathf.Ceil(startPoint); // get rid of redundant '-' when b is negative
             string start = Mathf.Ceil(startPoint).ToString();
-            if (roundedStart <= 0) start = start.Substring(1).Trim(); // remove the redundant minus
+            if (roundedStart <= 0) {
+                start = start.Substring(1).Trim(); // remove the redundant minus
+            }
             formule = roundedStart != 0 ? coefficient.ToString("F1") + "x" + mathOperator + start : coefficient.ToString("F1") + "x";
         } else {
             formule = "Geen formule";
@@ -46,7 +48,7 @@ public class DrawLine : MonoBehaviour {
         return formule;
     }
 
-    public static string GetFormulaFromVector(Vector3 startMousePos, Vector3 mousePos) {
-        return GetFormulaFromVector(new Vector2(startMousePos.x, startMousePos.y), new Vector2(mousePos.x, mousePos.y));
+    public static string GetFormulaFromVector(Vector3 startPos, Vector3 endPos) {
+        return GetFormulaFromVector(new Vector2(startPos.x, startPos.y), new Vector2(endPos.x, endPos.y));
     }
 }

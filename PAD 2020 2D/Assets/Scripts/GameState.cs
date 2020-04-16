@@ -33,6 +33,9 @@ public class GameState : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (!SceneManager.GetActiveScene().name.Equals("Level") || Waypoints.pipes == null) {
+            return;
+        }
         lineCollider = lines.GetComponent<Collider2D>();
         firstPos = lines.GetComponent<LineRenderer>().GetPosition(0);
         beginPunt = lines.GetComponent<LineRenderer>().GetPosition(1);
@@ -41,6 +44,7 @@ public class GameState : MonoBehaviour {
         doel = GameObject.Find("GoalLine").GetComponent<LineRenderer>().GetPosition(1);
         foreach (Transform t in Hazards.hazards) {
             Collider2D hazardCollider = t.GetComponent<Collider2D>();
+            Debug.Log(lineCollider.bounds.Intersects(hazardCollider.bounds));
             if (lineCollider.bounds.Intersects(hazardCollider.bounds) && DetectHit(doel, Objectives.objectives[1].position, Margin)) { // hit hazard when line fully deployed, so level failed
                 Debug.Log("hazard!");
                 SceneManager.LoadScene("FinishedLevel");
