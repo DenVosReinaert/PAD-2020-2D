@@ -220,7 +220,7 @@ public class ActiveLineChecker : MonoBehaviour {
             mathOperator = formula[1];
 
         }
-        if (formula.Length > 3) {
+        if (formula.Length == 3) {
             b = ParseNumber(formula[2]);
         }
 

@@ -31,7 +31,7 @@ public class DrawLine : MonoBehaviour {
             float dy = endPos.y - startPos.y;
             float dx = endPos.x - startPos.x;
             float coefficient = dy / dx;
-            // use mousePos for y & x, multiply coefficient by x and subtract result from y, that way you have b.
+            // use endPos for y & x, multiply coefficient by x and subtract result from y, that way you have b.
             float startPoint;
             float ax = coefficient * endPos.x; // coefficient calculation
             startPoint = endPos.y - ax; // calculation of b (b = y - ax)
@@ -46,7 +46,7 @@ public class DrawLine : MonoBehaviour {
             formule = "Geen formule";
         }
         return formule;
-    }
+    } // condition ? if it is true then : if it is false then
 
     public static string GetFormulaFromVector(Vector3 startPos, Vector3 endPos) {
         return GetFormulaFromVector(new Vector2(startPos.x, startPos.y), new Vector2(endPos.x, endPos.y));

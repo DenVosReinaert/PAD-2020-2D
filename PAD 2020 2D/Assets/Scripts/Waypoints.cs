@@ -14,13 +14,13 @@ public class Waypoints : MonoBehaviour {
             Debug.Log(pipes[i].position + " " + pipes[i].gameObject.name);
         }
         if (!Interscene.instance.retryLevel) {
-            GameObject.Find("Pipe").transform.position = RandomPosition();
-            GameObject.Find("Pipe (1)").transform.position = RandomPosition();
-            GameObject.Find("Pipe (2)").transform.position = RandomPosition();
+            for (int i = 0; i < Waypoints.pipes.Length; i++) {
+                Waypoints.pipes[i].position = RandomPosition();
+            }
         } else {
-            GameObject.Find("Pipe").transform.position = Interscene.instance.pipes[0];
-            GameObject.Find("Pipe (1)").transform.position = Interscene.instance.pipes[1];
-            GameObject.Find("Pipe (2)").transform.position = Interscene.instance.pipes[2];
+            for (int i = 0; i < Waypoints.pipes.Length; i++) {
+                Waypoints.pipes[i].position = Interscene.instance.pipes[i];
+            }
         }
         for (int i = 0; i < Interscene.instance.pipes.Length; i++) {
             Interscene.instance.pipes[i] = pipes[i].position;
