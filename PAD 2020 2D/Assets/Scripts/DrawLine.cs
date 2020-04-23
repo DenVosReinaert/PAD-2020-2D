@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DrawLine : MonoBehaviour {
+public class DrawLine : MonoBehaviour
+{
+    private Vector2 direction = new Vector2(1, -1);
+    private static float currentCoefficient = 0;
+
+    public Vector2 Middle = new Vector2(0, 0);
 
     void Awake() {
         LineRenderer renderer = GetComponent<LineRenderer>(); // get the component from unity
@@ -23,6 +28,35 @@ public class DrawLine : MonoBehaviour {
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (gameObject.name.Equals("LineDrawer")) {
+            Debug.DrawRay(Objectives.objectives[0].position, direction * 10, Color.blue);
+            RaycastHit2D hitWaypoint1 = Physics2D.Raycast(Objectives.objectives[0].position, direction * 10);
+            if (hitWaypoint1.collider != null) {
+                //Debug.Log("check me out!");
+            }
+        } else if (gameObject.name.Equals("Waypoints1T2")) {
+            Debug.DrawRay(Waypoints.pipes[0].position, direction * 10, Color.blue);
+            RaycastHit2D hitWaypoint2 = Physics2D.Raycast(Waypoints.pipes[0].position, direction * 10);
+            if (hitWaypoint2.collider != null) {
+                //Debug.Log("check me out!");
+            }
+        } else if (gameObject.name.Equals("Waypoints2T3")) {
+            Debug.DrawRay(Waypoints.pipes[1].position, direction * 10, Color.blue);
+            RaycastHit2D hitWaypoint3 = Physics2D.Raycast(Waypoints.pipes[1].position, direction * 10);
+            if (hitWaypoint3.collider != null) {
+                //Debug.Log("check me out!");
+            }
+        } else if (gameObject.name.Equals("GoalLine")) {
+            Debug.DrawRay(Waypoints.pipes[2].position, direction * 10, Color.blue);
+            RaycastHit2D goal = Physics2D.Raycast(Waypoints.pipes[2].position, direction * 10);
+            if (goal.collider != null) {
+                //Debug.Log("check me out!");
+            }
+        }
+    }
+
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {
         string formule;
         // algebra
@@ -31,6 +65,7 @@ public class DrawLine : MonoBehaviour {
             float dy = endPos.y - startPos.y;
             float dx = endPos.x - startPos.x;
             float coefficient = dy / dx;
+            currentCoefficient = coefficient;
             // use mousePos for y & x, multiply coefficient by x and subtract result from y, that way you have b.
             float startPoint;
             float ax = coefficient * endPos.x; // coefficient calculation
@@ -50,5 +85,9 @@ public class DrawLine : MonoBehaviour {
 
     public static string GetFormulaFromVector(Vector3 startPos, Vector3 endPos) {
         return GetFormulaFromVector(new Vector2(startPos.x, startPos.y), new Vector2(endPos.x, endPos.y));
+    }
+
+    public static float getCurrentCoefficient() {
+        return currentCoefficient;
     }
 }
