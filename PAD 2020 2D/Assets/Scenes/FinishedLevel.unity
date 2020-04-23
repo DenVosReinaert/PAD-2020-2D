@@ -314,6 +314,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: QuitButton
       objectReference: {fileID: 0}
+    - target: {fileID: 7656075515172910970, guid: c0d3da7f0525d0d4db69d69336ef332d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7656075516558002716, guid: c0d3da7f0525d0d4db69d69336ef332d,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -344,6 +349,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textAlignment
       value: 514
+      objectReference: {fileID: 0}
+    - target: {fileID: 7656075516558002718, guid: c0d3da7f0525d0d4db69d69336ef332d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0d3da7f0525d0d4db69d69336ef332d, type: 3}
@@ -569,6 +579,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NextLevelButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 2677923628455682554, guid: 06d6c7b2983645a41891a3b5930c33dd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956199395773365611, guid: 06d6c7b2983645a41891a3b5930c33dd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5918892254402602645, guid: 06d6c7b2983645a41891a3b5930c33dd,
         type: 3}
@@ -894,7 +914,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316291890}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.24, y: -4.4, z: 0}
+  m_LocalPosition: {x: -11.54, y: -4.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -910,7 +930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1439555925}
   - component: {fileID: 1439555927}
-  m_Layer: 5
+  m_Layer: 4
   m_Name: FinishedLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1136,6 +1156,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RetryButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 2677923628455682554, guid: 06d6c7b2983645a41891a3b5930c33dd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956199395773365611, guid: 06d6c7b2983645a41891a3b5930c33dd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5918892254402602645, guid: 06d6c7b2983645a41891a3b5930c33dd,
         type: 3}
