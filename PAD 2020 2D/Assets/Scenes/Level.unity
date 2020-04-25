@@ -3543,6 +3543,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000,
         type: 0}
+    - target: {fileID: 2410064550064455360, guid: 950dfae6e1dbf8d4a81c6712a8e2c077,
+        type: 3}
+      propertyPath: m_TagString
+      value: Pipe
+      objectReference: {fileID: 0}
     - target: {fileID: 5927382256410530359, guid: 950dfae6e1dbf8d4a81c6712a8e2c077,
         type: 3}
       propertyPath: m_Color.a
@@ -4226,6 +4231,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000,
         type: 0}
+    - target: {fileID: 2410064550064455360, guid: 950dfae6e1dbf8d4a81c6712a8e2c077,
+        type: 3}
+      propertyPath: m_TagString
+      value: Pipe
+      objectReference: {fileID: 0}
     - target: {fileID: 5927382256410530359, guid: 950dfae6e1dbf8d4a81c6712a8e2c077,
         type: 3}
       propertyPath: m_Color.a
@@ -4327,6 +4337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d80cc60e66adf4468549c63717b1859, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coeefficient: 0
 --- !u!4 &1113929403
 Transform:
   m_ObjectHideFlags: 0
@@ -5341,6 +5352,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2410064550064455360, guid: 950dfae6e1dbf8d4a81c6712a8e2c077,
+        type: 3}
+      propertyPath: m_TagString
+      value: Pipe
       objectReference: {fileID: 0}
     - target: {fileID: 5927382256410530359, guid: 950dfae6e1dbf8d4a81c6712a8e2c077,
         type: 3}

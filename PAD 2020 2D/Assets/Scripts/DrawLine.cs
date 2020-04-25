@@ -33,8 +33,8 @@ public class DrawLine : MonoBehaviour
         if (gameObject.name.Equals("LineDrawer")) {
             Debug.DrawRay(Objectives.objectives[0].position, direction * 10, Color.blue);
             RaycastHit2D hitWaypoint1 = Physics2D.Raycast(Objectives.objectives[0].position, direction * 10);
-            if (hitWaypoint1.collider != null) {
-                //Debug.Log("check me out!");
+            if (hitWaypoint1.collider.CompareTag("Pipe")) {
+                Debug.Log("check me out!");
             }
         } else if (gameObject.name.Equals("Waypoints1T2")) {
             Debug.DrawRay(Waypoints.pipes[0].position, direction * 10, Color.blue);

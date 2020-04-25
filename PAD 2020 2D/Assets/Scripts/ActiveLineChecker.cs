@@ -12,6 +12,7 @@ public class ActiveLineChecker : MonoBehaviour {
     public static Transform[] lines;
     public static GameObject activeLine;
     private Dictionary<GameObject, string> formulas;
+    public float coeefficient;
 
     private GameObject inputText;
 
@@ -24,6 +25,11 @@ public class ActiveLineChecker : MonoBehaviour {
         formulas = BuildDictionary();
         inputText = GameObject.Find("Formule");
     }
+
+    //void FixedUpdate()
+    // {
+    //  Debug.DrawRay(activeLine.GetComponent<LineRenderer>().GetPosition(0), new Vector2(activeLine.GetComponent<LineRenderer>().GetPosition(1).x, coeefficient * activeLine.GetComponent<LineRenderer>().GetPosition(1).x));
+    //}
 
     void Update() {
         for (int i = 0; i < lines.Length; i++) {
@@ -46,6 +52,7 @@ public class ActiveLineChecker : MonoBehaviour {
         if (newFormula != "") {
             if (CanParseFormula(newFormula)) {
                 string[] calculation = ParseFormula(newFormula);
+                coeefficient = ParseNumber(calculation[0].Substring(0, calculation[0].Length-1));
                 KeyValuePair<float, float> points = GetPoints(calculation);
                 Debug.Log(points.Key + " " + points.Value);
                 activeLine.GetComponent<LineRenderer>().SetPosition(1, new Vector2(points.Key, points.Value));
@@ -55,6 +62,7 @@ public class ActiveLineChecker : MonoBehaviour {
         }
     }
 
+    //for saving entered formulas
     private static Dictionary<GameObject, string> BuildDictionary() {
         Dictionary<GameObject, string> returnItem = new Dictionary<GameObject, string>();
         for (int i = 0; i < lines.Length; i++) {
