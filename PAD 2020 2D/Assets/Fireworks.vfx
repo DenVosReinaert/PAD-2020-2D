@@ -56,7 +56,7 @@ MonoBehaviour:
     x: -446
     y: -890
     width: 2043
-    height: 2922
+    height: 2902
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -175,7 +175,7 @@ VisualEffectResource:
       stripData);\r\n\t\t// TODO Change seed to be sure we're deterministic on random
       with strip\r\n#endif\r\n        \r\n        {\n            PositionLine_0(
       /*inout */attributes.position,  /*inout */attributes.seed, float3(2, 0, -10),
-      float3(13, 0, -10), (float)1);\n        }\n        {\n            SetAttribute_E6295C0(
+      float3(20.2079296, 0, -10), (float)1);\n        }\n        {\n            SetAttribute_E6295C0(
       /*inout */attributes.velocity,  /*inout */attributes.seed, float3(-0.333000004,
       11, -0.333000004), float3(0.333000004, 14, 0.333000004));\n        }\n       
       {\n            SetAttribute_F01429A3( /*inout */attributes.lifetime,  /*inout
@@ -2120,7 +2120,7 @@ VisualEffectResource:
         - m_ExpressionIndex: 23
           m_Value: {x: 2, y: 0, z: -10}
         - m_ExpressionIndex: 24
-          m_Value: {x: 13, y: 0, z: -10}
+          m_Value: {x: 20.20793, y: 0, z: -10}
         - m_ExpressionIndex: 26
           m_Value: {x: -0.333, y: 11, z: -0.333}
         - m_ExpressionIndex: 27
@@ -4201,7 +4201,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Line, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"start":{"x":2.0,"y":0.0,"z":-10.0},"end":{"x":13.0,"y":0.0,"z":-10.0}}'
+      m_SerializableObject: '{"start":{"x":2.0,"y":0.0,"z":-10.0},"end":{"x":20.207929611206056,"y":0.0,"z":-10.0}}'
     m_Space: 0
   m_Property:
     name: line
