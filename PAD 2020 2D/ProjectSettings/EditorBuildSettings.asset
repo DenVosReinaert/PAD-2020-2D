@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Game.unity
     guid: f32e4838849b62e43849a949ea959f51
   - enabled: 1
-    path: Assets/Scenes/FinishedLevel.unity
+    path: Assets/Scenes/FinishedLevelWin.unity
     guid: ee5bc77dc84ae2d44a7953e918cffc84
   - enabled: 0
     path: Assets/Scenes/CompletedLevel.unity
