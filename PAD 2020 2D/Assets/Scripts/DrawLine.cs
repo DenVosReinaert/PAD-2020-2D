@@ -8,34 +8,37 @@ public class DrawLine : MonoBehaviour
     private static float currentCoefficient = 0;
     public Vector3 dir;
     public Vector2 Middle = new Vector2(0, 0);
+    public float offsetSource = 2.982594f;
 
-    private LineRenderer lineRedender;
+    private LineRenderer lineRenderer;
 
 
     void Awake() {
-         lineRedender = GetComponent<LineRenderer>(); // get the component from unity
-         lineRedender.positionCount = 2; // set amount of positions
-         
-        if (gameObject.name.Equals("LineDrawer")) {
-            lineRedender.SetPosition(0, Objectives.objectives[0].position);
-            lineRedender.SetPosition(1, Waypoints.pipes[0].position);
+         lineRenderer = GetComponent<LineRenderer>(); // get the component from unity
+         lineRenderer.positionCount = 2; // set amount of positions
+         lineRenderer.alignment = LineAlignment.Local;
+
+         if (gameObject.name.Equals("LineDrawer")) {
+            lineRenderer.SetPosition(0, Objectives.objectives[0].position);
+            lineRenderer.SetPosition(1, Waypoints.pipes[0].position);
             //renderer.SetPosition(1, new Vector3(Objectives.objectives[0].position.x + 1, Objectives.objectives[0].position.y - 1, 0f));
         } else if (gameObject.name.Equals("Waypoints1T2")) {
-            lineRedender.SetPosition(0, Waypoints.pipes[0].position);
-            lineRedender.SetPosition(1, new Vector3(Waypoints.pipes[0].position.x + 1, Waypoints.pipes[0].position.y - 1, 0f));
+            lineRenderer.SetPosition(0, Waypoints.pipes[0].position);
+            lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[0].position.x + 1, Waypoints.pipes[0].position.y - 1, 0f));
         } else if (gameObject.name.Equals("Waypoints2T3")) {
-            lineRedender.SetPosition(0, Waypoints.pipes[1].position);
-            lineRedender.SetPosition(1, new Vector3(Waypoints.pipes[1].position.x + 1, Waypoints.pipes[1].position.y - 1, 0f));
+            lineRenderer.SetPosition(0, Waypoints.pipes[1].position);
+            lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[1].position.x + 1, Waypoints.pipes[1].position.y - 1, 0f));
         } else if (gameObject.name.Equals("GoalLine")) {
-            lineRedender.SetPosition(0, Waypoints.pipes[2].position);
-            lineRedender.SetPosition(1, new Vector3(Waypoints.pipes[2].position.x + 1, Waypoints.pipes[2].position.y - 1, 0f));
+            lineRenderer.SetPosition(0, Waypoints.pipes[2].position);
+            lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[2].position.x + 1, Waypoints.pipes[2].position.y - 1, 0f));
         }
     }
 
     private void FixedUpdate()
     {
       
-        dir = lineRedender.GetPosition(1);
+        dir = lineRenderer.GetPosition(1);
+        Vector3 adjusted = new Vector3(Waypoints.pipes[0].position.x, Waypoints.pipes[0].position.y + offsetSource, 0.0f);
 
         //raycast is going in a straight line problem is that the renderer has an offset
         if (gameObject.name.Equals("LineDrawer")) {
@@ -43,7 +46,7 @@ public class DrawLine : MonoBehaviour
             Debug.DrawRay(Objectives.objectives[0].position, dir, Color.blue);
             if (hitWaypoint1.collider.CompareTag("Pipe")) {
                 Debug.Log("check me out!");
-                lineRedender.SetPosition(1, Waypoints.pipes[0].position);
+                lineRenderer.SetPosition(1, adjusted);
             }
         } else if (gameObject.name.Equals("Waypoints1T2")) {
             RaycastHit2D hitWaypoint2 = Physics2D.Raycast(Waypoints.pipes[0].position, dir);
