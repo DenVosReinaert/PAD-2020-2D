@@ -36,37 +36,35 @@ public class DrawLine : MonoBehaviour
 
     private void FixedUpdate()
     {
-      
-        dir = lineRenderer.GetPosition(1);
-        Vector3 adjusted = new Vector3(Waypoints.pipes[0].position.x, Waypoints.pipes[0].position.y + offsetSource, 0.0f);
+        StopLineOnCol(GetComponent<LineRenderer>().GetPosition(1));
+    }
 
-        //raycast is going in a straight line problem is that the renderer has an offset
-        if (gameObject.name.Equals("LineDrawer")) {
-            RaycastHit2D hitWaypoint1 = Physics2D.Raycast(Objectives.objectives[0].position, dir);
-            Debug.DrawRay(Objectives.objectives[0].position, dir, Color.blue);
-            if (hitWaypoint1.collider.CompareTag("Pipe")) {
-                Debug.Log("check me out!");
-                lineRenderer.SetPosition(1, adjusted);
-            }
-        } else if (gameObject.name.Equals("Waypoints1T2")) {
-            RaycastHit2D hitWaypoint2 = Physics2D.Raycast(Waypoints.pipes[0].position, dir);
-            Debug.DrawRay(Waypoints.pipes[0].position, dir, Color.blue);
-            if (hitWaypoint2.collider != null) {
-                //Debug.Log("check me out!");
-            }
-        } else if (gameObject.name.Equals("Waypoints2T3")) {
-            RaycastHit2D hitWaypoint3 = Physics2D.Raycast(Waypoints.pipes[1].position, dir);
-            Debug.DrawRay(Waypoints.pipes[1].position, dir, Color.blue);
-            if (hitWaypoint3.collider != null) {
-                //Debug.Log("check me out!");
-            }
-        } else if (gameObject.name.Equals("GoalLine")) {
-            RaycastHit2D goal = Physics2D.Raycast(Waypoints.pipes[2].position, dir);
-            Debug.DrawRay(Waypoints.pipes[2].position, dir, Color.blue);
-            if (goal.collider != null) {
-                //Debug.Log("check me out!");
+    private void StopLineOnCol(Vector3 points)
+    {
+        LineRenderer renderer = GetComponent<LineRenderer>();
+        //here you need to find the direction of the line and set it so you can allign the line and ray 
+
+        Vector3 TO = new Vector3(points.x, points.y) - Objectives.objectives[0].position;
+        float distance = TO.magnitude;
+        Vector3 Dir = TO / distance;
+
+        if (gameObject.name.Equals("LineDrawer"))
+        {
+            //this sets the ray to the directions for 100 units you may want to change that but it wil only hit the first object unless you want it to hit multiple at one time this needs to be changed
+            RaycastHit2D hitWaypoint1 = Physics2D.Linecast(Objectives.objectives[0].position, Dir);
+            //debug for visual reason
+            //RED is just ray directions of the firsty Objective only using the dirctions of the line render not the calculations less taxing on a pc. this calls every Physics frame so you may want this changed aswell
+            Debug.DrawRay(Objectives.objectives[0].position, Dir, Color.red);
+            //this tests on hit of the colider and will do on ANY Colision you may want to change this so it only colides with one or more objects.
+            ;
+            //here is where you see what the LINE or RAYCAST hit make sure to use this for scaling.
+            if (hitWaypoint1.collider.CompareTag("Pipe"))
+            {
+                //debug that should only show if you hit a object with a colider ANY colider will do if you want a name or tag you can use the if statment above to get any varible you want compared
+                Debug.Log("point values " + new Vector3(points.x, points.y) + "point values " + renderer.GetPosition(1) + "hit name is:" + hitWaypoint1.transform.name);
             }
         }
+        
     }
 
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {
