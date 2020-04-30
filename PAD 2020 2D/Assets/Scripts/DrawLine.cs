@@ -9,6 +9,7 @@ public class DrawLine : MonoBehaviour
     public Vector3 dir;
     public Vector2 Middle = new Vector2(0, 0);
     public float offsetSource = 2.982594f;
+    public bool rightLine = false;
 
     private LineRenderer lineRenderer;
 
@@ -42,7 +43,7 @@ public class DrawLine : MonoBehaviour
     private void StopLineOnCol(Vector3 points)
     {
         LineRenderer renderer = GetComponent<LineRenderer>();
-        //here you need to find the direction of the line and set it so you can allign the line and ray 
+        //allign the line and ray 
 
         Vector3 TO = new Vector3(points.x, points.y) - Objectives.objectives[0].position;
         float distance = TO.magnitude;
@@ -50,22 +51,32 @@ public class DrawLine : MonoBehaviour
 
         if (gameObject.name.Equals("LineDrawer"))
         {
-            //this sets the ray to the directions for 100 units you may want to change that but it wil only hit the first object unless you want it to hit multiple at one time this needs to be changed
-            RaycastHit2D hitWaypoint1 = Physics2D.Linecast(Objectives.objectives[0].position, Dir);
-            //debug for visual reason
-            //RED is just ray directions of the firsty Objective only using the dirctions of the line render not the calculations less taxing on a pc. this calls every Physics frame so you may want this changed aswell
-            Debug.DrawRay(Objectives.objectives[0].position, Dir, Color.red);
-            //this tests on hit of the colider and will do on ANY Colision you may want to change this so it only colides with one or more objects.
-            ;
-            //here is where you see what the LINE or RAYCAST hit make sure to use this for scaling.
-            if (hitWaypoint1.collider.CompareTag("Pipe"))
+            RaycastHit2D hitWaypoint1 = Physics2D.Linecast(Objectives.objectives[0].position, TO);
+            Debug.DrawRay(Objectives.objectives[0].position, TO, Color.red);
+            //this tests on hit of the colider
+            if (hitWaypoint1.collider)
             {
-                //debug that should only show if you hit a object with a colider ANY colider will do if you want a name or tag you can use the if statment above to get any varible you want compared
-                Debug.Log("point values " + new Vector3(points.x, points.y) + "point values " + renderer.GetPosition(1) + "hit name is:" + hitWaypoint1.transform.name);
+                Debug.Log("tag:" + hitWaypoint1.collider.tag + "name" + hitWaypoint1.collider.name);
+                if (hitWaypoint1.collider.CompareTag("Pipe"))
+                {
+                    //debug that should only show if you hit a object with a colider ANY colider will do if you want a name or tag you can use the if statment above to get any varible you want compared
+                    Debug.Log("point values " + new Vector3(points.x, points.y) + "point values " + renderer.GetPosition(1) + "hit name is:" + hitWaypoint1.transform.name);
+                    renderer.SetPosition(1, hitWaypoint1.collider.transform.position);
+                    rightLine = true;
+                }
             }
         }
-        
+
+        if (rightLine == true)
+        {
+            if (gameObject.name.Equals("LineDrawerClone"))
+            {
+                lineRenderer.SetPosition(0, Objectives.objectives[0].position);
+                lineRenderer.SetPosition(1, Waypoints.pipes[0].position);
+            }
+        }
     }
+
 
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {
         string formule;
