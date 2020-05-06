@@ -12,82 +12,14 @@ public class DrawLine : MonoBehaviour
     public bool rightLine = false;
     public GameObject cube;
 
-    private LineRenderer lineRenderer;
-
-
     void Awake() {
-         lineRenderer = GetComponent<LineRenderer>(); // get the component from unity
-         lineRenderer.positionCount = 2; // set amount of positions
-         lineRenderer.alignment = LineAlignment.TransformZ;
-
-         if (gameObject.name.Equals("LineDrawer")) {
-            lineRenderer.SetPosition(0, Objectives.objectives[0].position);
-            //lineRenderer.SetPosition(1, Waypoints.pipes[0].position);
-            lineRenderer.SetPosition(1, new Vector3(Objectives.objectives[0].position.x + 1, Objectives.objectives[0].position.y - 1, 0f));
-        } else if (gameObject.name.Equals("Waypoints1T2")) {
-            lineRenderer.SetPosition(0, Waypoints.pipes[0].position);
-            lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[0].position.x + 1, Waypoints.pipes[0].position.y - 1, 0f));
-        } else if (gameObject.name.Equals("Waypoints2T3")) {
-            lineRenderer.SetPosition(0, Waypoints.pipes[1].position);
-            lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[1].position.x + 1, Waypoints.pipes[1].position.y - 1, 0f));
-        } else if (gameObject.name.Equals("GoalLine")) {
-            lineRenderer.SetPosition(0, Waypoints.pipes[2].position);
-            lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[2].position.x + 1, Waypoints.pipes[2].position.y - 1, 0f));
-        }
+        CheckPosition();
     }
 
-    private void FixedUpdate()
-    {
-        StopLineOnCol(GetComponent<LineRenderer>().GetPosition(1));
+    void Update() {
+        CheckPosition();
     }
-
-    private void StopLineOnCol(Vector3 points)
-    {
-        LineRenderer renderer = GetComponent<LineRenderer>();
-        //allign the line and ray 
-
-        Vector3 TO = new Vector3(points.x, points.y) - Objectives.objectives[0].position;
-        float distance = TO.magnitude;
-        Vector3 Dir = TO / distance;
-
-        if (gameObject.name.Equals("LineDrawer"))
-        {
-            RaycastHit2D hitWaypoint1 = Physics2D.Linecast(Objectives.objectives[0].position, TO);
-            Debug.DrawRay(Objectives.objectives[0].position, TO, Color.red);
-            //this tests on hit of the colider
-            if (hitWaypoint1.collider)
-            {
-                Debug.Log("tag:" + hitWaypoint1.collider.tag + "name" + hitWaypoint1.collider.name);
-                if (hitWaypoint1.collider.CompareTag("Pipe"))
-                {
-                    //debug that should only show if you hit a object with a colider ANY colider will do if you want a name or tag you can use the if statment above to get any varible you want compared
-                    Debug.Log("point values " + new Vector3(points.x, points.y) + "point values " + renderer.GetPosition(1) + "hit name is:" + hitWaypoint1.transform.name);
-                    renderer.SetPosition(1, hitWaypoint1.collider.transform.position);
-                    //renderer.SetPosition(1, new Vector3(0, 0, 0));
-                    Debug.Log("position is" + hitWaypoint1.collider.transform.position);
-                    rightLine = true;
-                    cube.transform.position = hitWaypoint1.collider.transform.position;
-                }
-            }
-        }
-
-        if (rightLine == true)
-        {
-            if (gameObject.name.Equals("LineDrawerClone"))
-            {
-                lineRenderer.SetPosition(0, Objectives.objectives[0].position);
-                lineRenderer.SetPosition(1, Waypoints.pipes[0].position);
-            }
-        }
-    }
-
-   // void OnDrawGizmos()
-  //  {
-    //    Gizmos.color = Color.cyan;
-   //     Gizmos.DrawSphere(hitWaypoint1.collider.transform.position));
-   // }
-
-
+       
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {
         string formule;
         // algebra
@@ -120,5 +52,17 @@ public class DrawLine : MonoBehaviour
 
     public static float getCurrentCoefficient() {
         return currentCoefficient;
+    }
+
+    private void CheckPosition() {
+        if (gameObject.name.Equals("LineDrawer")) {
+            transform.position = new Vector2(Objectives.objectives[0].position.x, Objectives.objectives[0].position.y);
+        } else if (gameObject.name.Equals("Waypoints1T2")) {
+            transform.position = new Vector2(Waypoints.waypoints[0].position.x, Waypoints.waypoints[0].position.y - 0.5f);
+        } else if (gameObject.name.Equals("Waypoints2T3")) {
+            transform.position = new Vector2(Waypoints.waypoints[1].position.x, Waypoints.waypoints[1].position.y - 0.5f);
+        } else if (gameObject.name.Equals("GoalLine")) {
+            transform.position = new Vector2(Waypoints.waypoints[2].position.x, Waypoints.waypoints[2].position.y - 0.5f);
+        }
     }
 }

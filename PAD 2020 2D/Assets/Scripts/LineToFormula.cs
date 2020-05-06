@@ -14,7 +14,7 @@ public class LineToFormula : MonoBehaviour {
     private InputField inputField;
 
     // constants
-    private const string BasicFormula = "y = ax + b";
+    private const string BasicFormula = "y = ax";
 
     void Awake() {
         activeLine = ActiveLineChecker.activeLine.GetComponent<LineRenderer>();

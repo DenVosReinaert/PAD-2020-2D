@@ -5,25 +5,25 @@ using UnityEngine.SceneManagement;
 
 public class Waypoints : MonoBehaviour {
 
-    public static Transform[] pipes;
+    public static Transform[] waypoints;
 
     void Awake() {
-        pipes = new Transform[transform.childCount];
-        for (int i = 0; i < pipes.Length; i++) {
-            pipes[i] = transform.GetChild(i);
-            Debug.Log(pipes[i].position + " " + pipes[i].gameObject.name);
+        waypoints = new Transform[transform.childCount];
+        for (int i = 0; i < waypoints.Length; i++) {
+            waypoints[i] = transform.GetChild(i);
+            Debug.Log(waypoints[i].position + " " + waypoints[i].gameObject.name);
         }
         if (!Interscene.instance.retryLevel) {
-            GameObject.Find("Pipe").transform.position = RandomPosition();
-            GameObject.Find("Pipe (1)").transform.position = RandomPosition();
-            GameObject.Find("Pipe (2)").transform.position = RandomPosition();
+            GameObject.Find("WP").transform.position = RandomPosition();
+            GameObject.Find("WP (1)").transform.position = RandomPosition();
+            GameObject.Find("WP (2)").transform.position = RandomPosition();
         } else {
-            GameObject.Find("Pipe").transform.position = Interscene.instance.pipes[0];
-            GameObject.Find("Pipe (1)").transform.position = Interscene.instance.pipes[1];
-            GameObject.Find("Pipe (2)").transform.position = Interscene.instance.pipes[2];
+            GameObject.Find("WP").transform.position = Interscene.instance.waypoints[0];
+            GameObject.Find("WP (1)").transform.position = Interscene.instance.waypoints[1];
+            GameObject.Find("WP (2)").transform.position = Interscene.instance.waypoints[2];
         }
-        for (int i = 0; i < Interscene.instance.pipes.Length; i++) {
-            Interscene.instance.pipes[i] = pipes[i].position;
+        for (int i = 0; i < Interscene.instance.waypoints.Length; i++) {
+            Interscene.instance.waypoints[i] = waypoints[i].position;
         }
     }
 
@@ -56,11 +56,11 @@ public class Waypoints : MonoBehaviour {
                 }
             }
         }
-        for (int i = 0; i < pipes.Length; i++) {
-            if (pipes[i] == null) {
+        for (int i = 0; i < waypoints.Length; i++) {
+            if (waypoints[i] == null) {
                 continue;
             }
-            SpriteRenderer texture = pipes[i].GetComponent<SpriteRenderer>();
+            SpriteRenderer texture = waypoints[i].GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
                 if (rando.x > texture.bounds.center.x) {
                     rando.x++;

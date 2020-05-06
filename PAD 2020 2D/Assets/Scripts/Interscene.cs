@@ -7,13 +7,13 @@ public class Interscene : MonoBehaviour {
 
     public static Interscene instance;
     public bool retryLevel = false;
-    public Vector3[] pipes;
+    public Vector3[] waypoints;
 
     void Awake() {
         if (instance == null) {
             instance = this;
             DontDestroyOnLoad(this);
-            pipes = new Vector3[3];
+            waypoints = new Vector3[3];
         } else if (instance != this) {
             Destroy(this);
         }

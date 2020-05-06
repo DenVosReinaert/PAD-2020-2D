@@ -12,7 +12,7 @@ public class ActiveLineChecker : MonoBehaviour {
     public static Transform[] lines;
     public static GameObject activeLine;
     private Dictionary<GameObject, string> formulas;
-    public float coeefficient;
+    public float coefficient;
 
     private GameObject inputText;
 
@@ -26,22 +26,7 @@ public class ActiveLineChecker : MonoBehaviour {
         inputText = GameObject.Find("Formule");
     }
 
-    //void FixedUpdate()
-    // {
-    //  Debug.DrawRay(activeLine.GetComponent<LineRenderer>().GetPosition(0), new Vector2(activeLine.GetComponent<LineRenderer>().GetPosition(1).x, coeefficient * activeLine.GetComponent<LineRenderer>().GetPosition(1).x));
-    //}
-
     void Update() {
-        for (int i = 0; i < lines.Length; i++) {
-            LineRenderer lineRender = lines[i].GetComponent<LineRenderer>();
-            if (lines[i].gameObject != activeLine) {
-                lineRender.startColor = Color.red;
-                lineRender.endColor = Color.red;
-            } else {
-                lineRender.startColor = Color.blue;
-                lineRender.endColor = Color.blue;
-            }
-        }
         if (Input.GetKeyDown(KeyCode.RightArrow)) { // go to next line to edit when enter key is pressed
             NextLine();
         } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
@@ -52,10 +37,39 @@ public class ActiveLineChecker : MonoBehaviour {
         if (newFormula != "") {
             if (CanParseFormula(newFormula)) {
                 string[] calculation = ParseFormula(newFormula);
-                coeefficient = ParseNumber(calculation[0].Substring(0, calculation[0].Length-1));
+                coefficient = ParseNumber(calculation[0].Substring(0, calculation[0].Length-1));
                 KeyValuePair<float, float> points = GetPoints(calculation);
                 Debug.Log(points.Key + " " + points.Value);
-                activeLine.GetComponent<LineRenderer>().SetPosition(1, new Vector2(points.Key, points.Value));
+                double angle = 0;
+                Vector2 targetPosition = new Vector2(0, 0);
+                switch (activeLine.name) {
+                    case "LineDrawer":
+                        targetPosition = Waypoints.waypoints[0].position;
+                        break;
+                    case "Waypoints1T2":
+                        targetPosition = Waypoints.waypoints[1].position;
+                        break;
+                    case "Waypoints2T3":
+                        targetPosition = Waypoints.waypoints[2].position;
+                        break;
+                    case "GoalLine":
+                        targetPosition = Objectives.objectives[1].position;
+                        break;
+                    default:
+                        Debug.Log("Incorrect active line name.");
+                        break;
+                }
+                //double overstaande = targetPosition.x - activeLine.transform.position.x;
+                double yDifference = targetPosition.y - activeLine.transform.position.y;
+                if (coefficient != 0) {
+                    angle = GetAngle(calculation, yDifference);
+                }
+                angle += 90;
+                Debug.Log(angle + " " + activeLine.transform.rotation.eulerAngles.z);
+                if (activeLine.transform.rotation.eulerAngles.z != (float) angle) {
+                    activeLine.transform.rotation = Quaternion.Euler(0, 0, (float) angle);
+                }
+                // TODO: Stretch object & input rotation
             } else {
                 Debug.Log("Invalid formula!");
             }
@@ -66,8 +80,7 @@ public class ActiveLineChecker : MonoBehaviour {
     private static Dictionary<GameObject, string> BuildDictionary() {
         Dictionary<GameObject, string> returnItem = new Dictionary<GameObject, string>();
         for (int i = 0; i < lines.Length; i++) {
-            LineRenderer render = lines[i].GetComponent<LineRenderer>();
-            returnItem.Add(lines[i].gameObject, DrawLine.GetFormulaFromVector(render.GetPosition(0), render.GetPosition(1)));
+            returnItem.Add(lines[i].gameObject, "");
         }
         return returnItem;
     }
@@ -124,7 +137,7 @@ public class ActiveLineChecker : MonoBehaviour {
 
     public bool CanParseFormula(string formula) { // see if formula contains only digits, an x or a math operator
         foreach (char c in formula) {
-            if ((c < '0' || c > '9') && (c != 'x' && c != 'X') && (c != '+' && c != '-') && c != ' ' && c != '.') { // if not any of these values, then its not a correct formula so return false
+            if ((c < '0' || c > '9') && (c != 'x' && c != 'X') && (c != '+' && c != '-') && c != ' ' && c != '.' && c != 'y' && c != '=') { // if not any of these values, then its not a correct formula so return false
                 return false;
             }
         }
@@ -164,6 +177,11 @@ public class ActiveLineChecker : MonoBehaviour {
             } else {
                 formula.Replace("*", "");
             }
+        }
+        if (formula.Contains("y=")) {
+            formula.Replace("y=", "");
+        } else if (formula.Contains("y =")) {
+            formula.Replace("y =", "");
         }
         if (formula.Contains(" ")) { // with this form in mind: -1x - 3
             content = formula.Split(' ');
@@ -238,15 +256,15 @@ public class ActiveLineChecker : MonoBehaviour {
 
         if (activeLine.gameObject.name.Equals("LineDrawer"))
         {
-            x = Waypoints.pipes[0].position.x;
+            x = Waypoints.waypoints[0].position.x;
         }
         else if (activeLine.gameObject.name.Equals("Waypoints1T2"))
         {
-            x = Waypoints.pipes[1].position.x;
+            x = Waypoints.waypoints[1].position.x;
         }
         else if (activeLine.gameObject.name.Equals("Waypoints2T3"))
         { 
-            x = Waypoints.pipes[2].position.x;
+            x = Waypoints.waypoints[2].position.x;
         }
         else if (activeLine.gameObject.name.Equals("GoalLine"))
         {
@@ -262,6 +280,32 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         points = new KeyValuePair<float, float>(x, y);
         return points;
+    }
+
+    public double GetAngle(string[] formula, double diffenceOnYAxis) {
+        double angle = 0;
+        string toParse = formula[0].Replace("x", "");
+        int coefficient = 0;
+        if (CanParse(toParse)) {
+            coefficient = int.Parse(formula[0].Replace("x", ""));
+        } else {
+            Debug.Log("Cannot parse angle!");
+        }
+        // y = ax
+        // x = y / a
+        double xDistance = diffenceOnYAxis / coefficient;
+        double hoek = xDistance / diffenceOnYAxis; // overstaande / aanliggende
+        double angleInRadians = Mathf.Atan((float) hoek);
+        angle = angleInRadians * (180 / Math.PI);
+        return angle;
+    }
+
+    public double GetAngle(string[] formula, double overstaande, double aanliggende) {
+        double angle = 0;
+        double hoek = overstaande / aanliggende;
+        double angleInRadians = Mathf.Atan((float) hoek);
+        angle = angleInRadians * (180 / Math.PI);
+        return angle;
     }
 
     private static float ParseNumber(string intToParse) {
