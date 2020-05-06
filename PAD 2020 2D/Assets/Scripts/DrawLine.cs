@@ -18,7 +18,7 @@ public class DrawLine : MonoBehaviour
     void Awake() {
          lineRenderer = GetComponent<LineRenderer>(); // get the component from unity
          lineRenderer.positionCount = 2; // set amount of positions
-         lineRenderer.alignment = LineAlignment.Local;
+         lineRenderer.alignment = LineAlignment.TransformZ;
 
          if (gameObject.name.Equals("LineDrawer")) {
             lineRenderer.SetPosition(0, Objectives.objectives[0].position);
