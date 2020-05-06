@@ -10,6 +10,7 @@ public class DrawLine : MonoBehaviour
     public Vector2 Middle = new Vector2(0, 0);
     public float offsetSource = 2.982594f;
     public bool rightLine = false;
+    public GameObject cube;
 
     private LineRenderer lineRenderer;
 
@@ -21,8 +22,8 @@ public class DrawLine : MonoBehaviour
 
          if (gameObject.name.Equals("LineDrawer")) {
             lineRenderer.SetPosition(0, Objectives.objectives[0].position);
-            lineRenderer.SetPosition(1, Waypoints.pipes[0].position);
-            //renderer.SetPosition(1, new Vector3(Objectives.objectives[0].position.x + 1, Objectives.objectives[0].position.y - 1, 0f));
+            //lineRenderer.SetPosition(1, Waypoints.pipes[0].position);
+            lineRenderer.SetPosition(1, new Vector3(Objectives.objectives[0].position.x + 1, Objectives.objectives[0].position.y - 1, 0f));
         } else if (gameObject.name.Equals("Waypoints1T2")) {
             lineRenderer.SetPosition(0, Waypoints.pipes[0].position);
             lineRenderer.SetPosition(1, new Vector3(Waypoints.pipes[0].position.x + 1, Waypoints.pipes[0].position.y - 1, 0f));
@@ -62,7 +63,10 @@ public class DrawLine : MonoBehaviour
                     //debug that should only show if you hit a object with a colider ANY colider will do if you want a name or tag you can use the if statment above to get any varible you want compared
                     Debug.Log("point values " + new Vector3(points.x, points.y) + "point values " + renderer.GetPosition(1) + "hit name is:" + hitWaypoint1.transform.name);
                     renderer.SetPosition(1, hitWaypoint1.collider.transform.position);
+                    //renderer.SetPosition(1, new Vector3(0, 0, 0));
+                    Debug.Log("position is" + hitWaypoint1.collider.transform.position);
                     rightLine = true;
+                    cube.transform.position = hitWaypoint1.collider.transform.position;
                 }
             }
         }
@@ -76,6 +80,12 @@ public class DrawLine : MonoBehaviour
             }
         }
     }
+
+   // void OnDrawGizmos()
+  //  {
+    //    Gizmos.color = Color.cyan;
+   //     Gizmos.DrawSphere(hitWaypoint1.collider.transform.position));
+   // }
 
 
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {

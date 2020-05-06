@@ -228,11 +228,31 @@ public class ActiveLineChecker : MonoBehaviour {
             mathOperator = formula[1];
 
         }
-        if (formula.Length > 3) {
+
+        if (formula.Length > 3)
+        {
             b = ParseNumber(formula[2]);
         }
 
-        float x = GameObject.Find("Goal").GetComponent<SpriteRenderer>().bounds.max.x + 10;
+        float x = 0;
+
+        if (activeLine.gameObject.name.Equals("LineDrawer"))
+        {
+            x = Waypoints.pipes[0].position.x;
+        }
+        else if (activeLine.gameObject.name.Equals("Waypoints1T2"))
+        {
+            x = Waypoints.pipes[1].position.x;
+        }
+        else if (activeLine.gameObject.name.Equals("Waypoints2T3"))
+        { 
+            x = Waypoints.pipes[2].position.x;
+        }
+        else if (activeLine.gameObject.name.Equals("GoalLine"))
+        {
+            x = Objectives.objectives[1].position.x;
+        }
+
         float ax = a * x;
         float y;
         if (mathOperator != "" && b != 0) {
