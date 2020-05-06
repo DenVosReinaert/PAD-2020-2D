@@ -56,13 +56,13 @@ public class DrawLine : MonoBehaviour
 
     private void CheckPosition() {
         if (gameObject.name.Equals("LineDrawer")) {
-            transform.position = new Vector2(Objectives.objectives[0].position.x, Objectives.objectives[0].position.y);
+            transform.position = new Vector3(Objectives.objectives[0].position.x, Objectives.objectives[0].position.y, 0);
         } else if (gameObject.name.Equals("Waypoints1T2")) {
-            transform.position = new Vector2(Waypoints.waypoints[0].position.x, Waypoints.waypoints[0].position.y - 0.5f);
+            transform.position = new Vector3(Waypoints.waypoints[0].position.x, Waypoints.waypoints[0].position.y - 0.5f, 0);
         } else if (gameObject.name.Equals("Waypoints2T3")) {
-            transform.position = new Vector2(Waypoints.waypoints[1].position.x, Waypoints.waypoints[1].position.y - 0.5f);
+            transform.position = new Vector3(Waypoints.waypoints[1].position.x, Waypoints.waypoints[1].position.y - 0.5f, 0);
         } else if (gameObject.name.Equals("GoalLine")) {
-            transform.position = new Vector2(Waypoints.waypoints[2].position.x, Waypoints.waypoints[2].position.y - 0.5f);
+            transform.position = new Vector3(Waypoints.waypoints[2].position.x, Waypoints.waypoints[2].position.y - 0.5f, 0);
         }
     }
 }

@@ -5,16 +5,25 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Input;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ActiveLineChecker : MonoBehaviour {
 
     public static Transform[] lines;
     public static GameObject activeLine;
+    public static List<GameObject> hitTheirGoal;
+    public float coefficient = 0;
     private Dictionary<GameObject, string> formulas;
-    public float coefficient;
+    private Dictionary<GameObject, bool> stretched;
+    private bool hasStretched;
+    
 
     private GameObject inputText;
+
+    private const int _MaxScale = 22;
+    private const float _ScaleIncrement = 0.1f;
+    private const float _ScaleDecrement = 0.2f;
 
     void Awake() {
         lines = new Transform[transform.childCount];
@@ -23,55 +32,97 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         activeLine = lines[0].gameObject;
         formulas = BuildDictionary();
+        stretched = BuildStretchedDictionary();
+        hitTheirGoal = new List<GameObject>();
         inputText = GameObject.Find("Formule");
     }
 
     void Update() {
+        if (hitTheirGoal.Contains(activeLine)) {
+            if (formulas.TryGetValue(activeLine, out string formula)) {
+                GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
+            }
+        }
+        if (hitTheirGoal.Count == 4) {
+            SceneManager.LoadScene("FinishedLevel");
+        }
         if (Input.GetKeyDown(KeyCode.RightArrow)) { // go to next line to edit when enter key is pressed
             NextLine();
         } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
             PreviousLine();
+        } else if (Input.GetKeyDown(KeyCode.Return) && !hasStretched) {
+            hasStretched = true;
+            if (stretched.ContainsKey(activeLine)) {
+                stretched.Remove(activeLine);
+                stretched.Add(activeLine, true);
+            }
+        }
+        if (hasStretched && activeLine.transform.localScale.y < _MaxScale) {
+            Vector3 newScale = activeLine.transform.localScale;
+            if (!hitTheirGoal.Contains(activeLine)) {
+                newScale.y += _ScaleIncrement;
+            }
+            activeLine.transform.localScale = newScale;
+        } else if (hasStretched && activeLine.transform.localScale.y >= _MaxScale) {
+            hasStretched = false;
+        }
+        
+        if (activeLine.transform.localScale.y > 1 && !hasStretched) {
+            Vector3 newScale = activeLine.transform.localScale;
+            if (!hitTheirGoal.Contains(activeLine)) {
+                newScale.y -= _ScaleDecrement;
+            }
+            activeLine.transform.localScale = newScale;
         }
         string newFormula = inputText.GetComponent<Text>().text;
         // formula parsing for reading
-        if (newFormula != "") {
-            if (CanParseFormula(newFormula)) {
-                string[] calculation = ParseFormula(newFormula);
-                coefficient = ParseNumber(calculation[0].Substring(0, calculation[0].Length-1));
-                KeyValuePair<float, float> points = GetPoints(calculation);
-                Debug.Log(points.Key + " " + points.Value);
-                double angle = 0;
-                Vector2 targetPosition = new Vector2(0, 0);
-                switch (activeLine.name) {
-                    case "LineDrawer":
-                        targetPosition = Waypoints.waypoints[0].position;
-                        break;
-                    case "Waypoints1T2":
-                        targetPosition = Waypoints.waypoints[1].position;
-                        break;
-                    case "Waypoints2T3":
-                        targetPosition = Waypoints.waypoints[2].position;
-                        break;
-                    case "GoalLine":
-                        targetPosition = Objectives.objectives[1].position;
-                        break;
-                    default:
-                        Debug.Log("Incorrect active line name.");
-                        break;
+        if (!hitTheirGoal.Contains(activeLine)) {
+            if (newFormula != "") {
+                if (CanParseFormula(newFormula)) {
+                    string[] calculation = ParseFormula(newFormula);
+                    formulas.Remove(activeLine);
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < calculation.Length; i++) {
+                        sb.Append(calculation[i]).Append(" ");
+                    }
+                    formulas.Add(activeLine, sb.ToString().Trim());
+                    if (calculation[0].EndsWith("x")) {
+                        coefficient = ParseNumber(calculation[0].Substring(0, calculation[0].Length - 1));
+                    } else if (!calculation[0].StartsWith("-") && !calculation[0].StartsWith("+")) {
+                        coefficient = ParseNumber(calculation[0]);
+                    }
+                    KeyValuePair<float, float> points = GetPoints(calculation);
+                    double angle = 0;
+                    Vector2 targetPosition = new Vector2(0, 0);
+                    switch (activeLine.name) {
+                        case "LineDrawer":
+                            targetPosition = Waypoints.waypoints[0].position;
+                            break;
+                        case "Waypoints1T2":
+                            targetPosition = Waypoints.waypoints[1].position;
+                            break;
+                        case "Waypoints2T3":
+                            targetPosition = Waypoints.waypoints[2].position;
+                            break;
+                        case "GoalLine":
+                            targetPosition = Objectives.objectives[1].position;
+                            break;
+                        default:
+                            Debug.Log("Incorrect active line name.");
+                            break;
+                    }
+                    double yDifference = targetPosition.y - activeLine.transform.position.y;
+                    if (coefficient != 0) {
+                        angle = GetAngle(calculation, yDifference);
+                    }
+                    angle += 90;
+                    if (activeLine.transform.rotation.eulerAngles.z != (float) angle) {
+                        activeLine.transform.rotation = Quaternion.Euler(0, 0, (float) angle);
+                    }
+                    // TODO: Stretch object & input rotation
+                } else {
+                    //Debug.Log("Invalid formula!");
                 }
-                //double overstaande = targetPosition.x - activeLine.transform.position.x;
-                double yDifference = targetPosition.y - activeLine.transform.position.y;
-                if (coefficient != 0) {
-                    angle = GetAngle(calculation, yDifference);
-                }
-                angle += 90;
-                Debug.Log(angle + " " + activeLine.transform.rotation.eulerAngles.z);
-                if (activeLine.transform.rotation.eulerAngles.z != (float) angle) {
-                    activeLine.transform.rotation = Quaternion.Euler(0, 0, (float) angle);
-                }
-                // TODO: Stretch object & input rotation
-            } else {
-                Debug.Log("Invalid formula!");
             }
         }
     }
@@ -80,7 +131,15 @@ public class ActiveLineChecker : MonoBehaviour {
     private static Dictionary<GameObject, string> BuildDictionary() {
         Dictionary<GameObject, string> returnItem = new Dictionary<GameObject, string>();
         for (int i = 0; i < lines.Length; i++) {
-            returnItem.Add(lines[i].gameObject, "");
+            returnItem.Add(lines[i].gameObject, "0x");
+        }
+        return returnItem;
+    }
+
+    private static Dictionary<GameObject, bool> BuildStretchedDictionary() {
+        Dictionary<GameObject, bool> returnItem = new Dictionary<GameObject, bool>();
+        for (int i = 0; i < lines.Length; i++) {
+            returnItem.Add(lines[i].gameObject, false);
         }
         return returnItem;
     }
@@ -100,6 +159,13 @@ public class ActiveLineChecker : MonoBehaviour {
                 activeLine = lines[3].gameObject;
             }
         }
+        if (stretched.ContainsKey(oldLine)) {
+            stretched.Remove(oldLine);
+            stretched.Add(oldLine, hasStretched);
+        } else {
+            stretched.Add(oldLine, hasStretched);
+        }
+        hasStretched = false;
         ClearFields(oldLine, activeLine.gameObject);
     }
 
@@ -117,6 +183,11 @@ public class ActiveLineChecker : MonoBehaviour {
             if (lines[2] != null) {
                 activeLine = lines[2].gameObject;
             }
+        }
+        if (stretched.TryGetValue(activeLine, out bool value)) {
+            hasStretched = value;
+        } else {
+            hasStretched = false;
         }
         ClearFields(oldLine, activeLine.gameObject);
     }
@@ -282,29 +353,21 @@ public class ActiveLineChecker : MonoBehaviour {
         return points;
     }
 
-    public double GetAngle(string[] formula, double diffenceOnYAxis) {
-        double angle = 0;
+    public double GetAngle(string[] formula, double differenceOnYAxis) {
         string toParse = formula[0].Replace("x", "");
-        int coefficient = 0;
+        double coefficient = 0d;
         if (CanParse(toParse)) {
-            coefficient = int.Parse(formula[0].Replace("x", ""));
+            coefficient = double.Parse(formula[0].Replace("x", ""));
         } else {
             Debug.Log("Cannot parse angle!");
         }
         // y = ax
         // x = y / a
-        double xDistance = diffenceOnYAxis / coefficient;
-        double hoek = xDistance / diffenceOnYAxis; // overstaande / aanliggende
-        double angleInRadians = Mathf.Atan((float) hoek);
-        angle = angleInRadians * (180 / Math.PI);
-        return angle;
-    }
-
-    public double GetAngle(string[] formula, double overstaande, double aanliggende) {
-        double angle = 0;
-        double hoek = overstaande / aanliggende;
-        double angleInRadians = Mathf.Atan((float) hoek);
-        angle = angleInRadians * (180 / Math.PI);
+        double xDistance = differenceOnYAxis / coefficient;
+        double hoek = differenceOnYAxis / xDistance;
+        double angleInRadians = Mathf.Atan((float) hoek); // hoek is returned in radians
+        double angle = angleInRadians * (180d / Math.PI); // convert radians to degrees
+        double test = Math.Tan(angle);
         return angle;
     }
 
