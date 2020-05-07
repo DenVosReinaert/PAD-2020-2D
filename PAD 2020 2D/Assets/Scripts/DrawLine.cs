@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DrawLine : MonoBehaviour {
+public class DrawLine : MonoBehaviour
+{
+    private static float currentCoefficient = 0;
+    public Vector3 dir;
+    public Vector2 Middle = new Vector2(0, 0);
+    public float offsetSource = 2.982594f;
+    public bool rightLine = false;
+    public GameObject cube;
 
     void Awake() {
-        LineRenderer renderer = GetComponent<LineRenderer>(); // get the component from unity
-        renderer.positionCount = 2; // set amount of positions
-        if (gameObject.name.Equals("LineDrawer")) {
-            renderer.SetPosition(0, Objectives.objectives[0].position);
-            renderer.SetPosition(1, new Vector3(Objectives.objectives[0].position.x + 1, Objectives.objectives[0].position.y - 1, 0f));
-        } else if (gameObject.name.Equals("Waypoints1T2")) {
-            renderer.SetPosition(0, Waypoints.pipes[0].position);
-            renderer.SetPosition(1, new Vector3(Waypoints.pipes[0].position.x + 1, Waypoints.pipes[0].position.y - 1, 0f));
-        } else if (gameObject.name.Equals("Waypoints2T3")) {
-            renderer.SetPosition(0, Waypoints.pipes[1].position);
-            renderer.SetPosition(1, new Vector3(Waypoints.pipes[1].position.x + 1, Waypoints.pipes[1].position.y - 1, 0f));
-        } else if (gameObject.name.Equals("GoalLine")) {
-            renderer.SetPosition(0, Waypoints.pipes[2].position);
-            renderer.SetPosition(1, new Vector3(Waypoints.pipes[2].position.x + 1, Waypoints.pipes[2].position.y - 1, 0f));
-        }
+        CheckPosition();
     }
 
+    void Update() {
+        CheckPosition();
+    }
+       
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {
         string formule;
         // algebra
@@ -31,7 +28,8 @@ public class DrawLine : MonoBehaviour {
             float dy = endPos.y - startPos.y;
             float dx = endPos.x - startPos.x;
             float coefficient = dy / dx;
-            // use endPos for y & x, multiply coefficient by x and subtract result from y, that way you have b.
+            currentCoefficient = coefficient;
+            // use mousePos for y & x, multiply coefficient by x and subtract result from y, that way you have b.
             float startPoint;
             float ax = coefficient * endPos.x; // coefficient calculation
             startPoint = endPos.y - ax; // calculation of b (b = y - ax)
@@ -50,5 +48,21 @@ public class DrawLine : MonoBehaviour {
 
     public static string GetFormulaFromVector(Vector3 startPos, Vector3 endPos) {
         return GetFormulaFromVector(new Vector2(startPos.x, startPos.y), new Vector2(endPos.x, endPos.y));
+    }
+
+    public static float getCurrentCoefficient() {
+        return currentCoefficient;
+    }
+
+    private void CheckPosition() {
+        if (gameObject.name.Equals("LineDrawer")) {
+            transform.position = new Vector3(Objectives.objectives[0].position.x, Objectives.objectives[0].position.y, 0);
+        } else if (gameObject.name.Equals("Waypoints1T2")) {
+            transform.position = new Vector3(Waypoints.waypoints[0].position.x, Waypoints.waypoints[0].position.y - 0.5f, 0);
+        } else if (gameObject.name.Equals("Waypoints2T3")) {
+            transform.position = new Vector3(Waypoints.waypoints[1].position.x, Waypoints.waypoints[1].position.y - 0.5f, 0);
+        } else if (gameObject.name.Equals("GoalLine")) {
+            transform.position = new Vector3(Waypoints.waypoints[2].position.x, Waypoints.waypoints[2].position.y - 0.5f, 0);
+        }
     }
 }
