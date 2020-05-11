@@ -6,6 +6,8 @@ public class CollisionChecker : MonoBehaviour {
 
     private ParticleSystem particle;
 
+    public CameraShake cameraShake;
+
     private const float _Red = 0f;
     private const float _Green = 100f / 255f;
     private const float _Blue = 0f;
@@ -27,6 +29,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Waypoints.waypoints[0].position);
+            StartCoroutine(cameraShake.Shake(.15f, .4f));
         } else if (name.Equals("Waypoints1T2")) {
             if (!other.gameObject.name.Equals("WP (1)")) {
                 return;
@@ -34,6 +37,8 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Waypoints.waypoints[1].position);
+            //StopAllCoroutines();
+            StartCoroutine(cameraShake.Shake(.15f, .4f));
         } else if (name.Equals("Waypoints2T3")) {
             if (!other.gameObject.name.Equals("WP (2)")) {
                 return;
@@ -41,6 +46,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Waypoints.waypoints[2].position);
+            StartCoroutine(cameraShake.Shake(.15f, .4f));
         } else if (name.Equals("GoalLine")) {
             if (!other.gameObject.name.Equals("Goal")) {
                 return;
@@ -48,6 +54,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Objectives.objectives[1].position);
+            StartCoroutine(cameraShake.Shake(.15f, .4f));
         }
 
         void Explode(Vector2 position)
