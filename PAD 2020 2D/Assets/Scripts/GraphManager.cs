@@ -20,17 +20,17 @@ public class GraphManager : MonoBehaviour
 
     void SpawnHorizontal()
     {
-        for (int i = 0; i < 11; i++)
+        for (int i = 1; i < 11; i++)
         {
             GameObject horizontalLine = Instantiate(HorizontalLine, HorizontalLineContainer);
-            horizontalLine.transform.localPosition = new Vector3(5,i);
+            horizontalLine.transform.localPosition = new Vector3(5, i);
             horizontalLine.GetComponentInChildren<TextMeshPro>().text = i.ToString();
         }
     }
 
     void SpawnVertical()
     {
-        for (int i = 0; i < 21; i++)
+        for (int i = 0; i < 20; i++)
         {
             GameObject verticalLine = Instantiate(VerticalLine, VerticalLineContainer);
             verticalLine.transform.localPosition = new Vector3(0, -i);
