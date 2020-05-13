@@ -9,7 +9,7 @@ public class LineToFormula : MonoBehaviour {
     private InputField inputField;
 
     // constants
-    private const string BasicFormula = "y = ax";
+    private const string BasicFormula = "y = ax + b";
 
     void Awake() {
         inputField = GameObject.Find("FormulaField").GetComponent<InputField>();
