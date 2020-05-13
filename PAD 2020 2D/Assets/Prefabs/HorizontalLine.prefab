@@ -95,8 +95,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
-      key1: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
+      key0: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
+      key1: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -141,6 +141,7 @@ GameObject:
   - component: {fileID: 1020085262980308810}
   - component: {fileID: 1020085262980308808}
   - component: {fileID: 1020085262980308809}
+  - component: {fileID: 5604392053709607}
   m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -164,7 +165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.519, y: -0.1}
+  m_AnchoredPosition: {x: 0.12, y: -0.1}
   m_SizeDelta: {x: 0.524, y: 0.907}
   m_Pivot: {x: 0.5, y: 0.2331881}
 --- !u!23 &1020085262980308808
@@ -265,7 +266,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_isAlignmentEnumConverted: 1
@@ -316,3 +317,11 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1020085262980308808}
   m_maskType: 0
+--- !u!33 &5604392053709607
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020085262980308811}
+  m_Mesh: {fileID: 0}
