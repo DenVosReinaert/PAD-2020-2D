@@ -65,6 +65,7 @@ public class ActiveLineChecker : MonoBehaviour {
             activeLine.transform.localScale = newScale;
         } else if (hasStretched && activeLine.transform.localScale.y >= _MaxScale) {
             hasStretched = false;
+            Lives.life--;
         }
         
         if (activeLine.transform.localScale.y > 1 && !hasStretched) {
