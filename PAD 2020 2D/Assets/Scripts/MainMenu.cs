@@ -10,6 +10,16 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Level");
     }
 
+    public void Shop()
+    {
+        SceneManager.LoadScene("Shop");
+    }
+
+    public void Menu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
     public void QuitGame()
     {
         Debug.Log("QuitGame");

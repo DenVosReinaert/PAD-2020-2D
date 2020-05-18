@@ -45,6 +45,7 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         if (hitTheirGoal.Count == 4) {
             SceneManager.LoadScene("FinishedLevel");
+            money.moneyAmount = + 500;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow)) { // go to next line to edit when enter key is pressed
             NextLine();
