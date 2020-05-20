@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CollisionChecker : MonoBehaviour {
 
@@ -27,6 +28,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Waypoints.waypoints[0].position);
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
         } else if (name.Equals("Waypoints1T2")) {
             if (!other.gameObject.name.Equals("WP (1)")) {
                 return;
@@ -34,6 +36,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Waypoints.waypoints[1].position);
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
         } else if (name.Equals("Waypoints2T3")) {
             if (!other.gameObject.name.Equals("WP (2)")) {
                 return;
@@ -41,6 +44,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Waypoints.waypoints[2].position);
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
         } else if (name.Equals("GoalLine")) {
             if (!other.gameObject.name.Equals("Goal")) {
                 return;
@@ -48,6 +52,7 @@ public class CollisionChecker : MonoBehaviour {
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
             gameObject.GetComponent<SpriteRenderer>().color = new Color(_Red, _Green, _Blue);
             Explode(Objectives.objectives[1].position);
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
         }
 
         void Explode(Vector2 position)

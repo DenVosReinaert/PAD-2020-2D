@@ -7,12 +7,13 @@ using System.Text;
 using System.Windows.Input;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Lives : MonoBehaviour
 {
 
     public GameObject[] hearts;
-    public static int life = 3;
+    public static int life = 5;
 
 
     void Update()
@@ -21,7 +22,7 @@ public class Lives : MonoBehaviour
         {
             Destroy(hearts[0].gameObject);
             SceneManager.LoadScene("FinishedLevel");
-            life = 3;
+            life = 5;
         }
         else if (life < 2)
         {
@@ -30,6 +31,10 @@ public class Lives : MonoBehaviour
         else if (life < 3)
         {
             Destroy(hearts[2].gameObject);
+        } else if (life < 4) {
+            Destroy(hearts[3].gameObject);
+        } else if (life < 5) {
+            Destroy(hearts[4].gameObject);
         }
     }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Windows.Input;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,11 +15,12 @@ public class ActiveLineChecker : MonoBehaviour {
     public static GameObject activeLine;
     public static List<GameObject> hitTheirGoal;
     public float coefficient = 0;
+
+    private Dictionary<GameObject, bool> hasBCorrect;
     private Dictionary<GameObject, string> formulas;
     private Dictionary<GameObject, bool> stretched;
     private bool hasStretched;
-    
-
+    private bool subtractedLife;
     private GameObject inputText;
 
     private const int _MaxScale = 22;
@@ -33,25 +35,40 @@ public class ActiveLineChecker : MonoBehaviour {
         activeLine = lines[0].gameObject;
         formulas = BuildDictionary();
         stretched = BuildStretchedDictionary();
+        hasBCorrect = BuildBDictionary();
         hitTheirGoal = new List<GameObject>();
         inputText = GameObject.Find("Formule");
     }
 
     void Update() {
-        if (hitTheirGoal.Contains(activeLine)) {
-            if (formulas.TryGetValue(activeLine, out string formula)) {
-                GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
+        if (hitTheirGoal.Contains(activeLine) && hasBCorrect.TryGetValue(activeLine, out bool isBCorrect)) {
+            if (isBCorrect) {
+                if (formulas.TryGetValue(activeLine, out string formula)) {
+                    GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
+                }
+            } else {
+                hitTheirGoal.Remove(activeLine);
             }
         }
         if (hitTheirGoal.Count == 4) {
-            SceneManager.LoadScene("FinishedLevel");
-            money.moneyAmount = + 500;
+            int completedLines = 0;
+            for (int i = 0; i < lines.Length; i++) {
+                if (hasBCorrect.TryGetValue(lines[i].gameObject, out bool isBCorrecto)) {
+                    if (isBCorrecto) {
+                        completedLines++;
+                    }
+                }
+            }
+            if (completedLines == 4) {
+                money.moneyAmount += Lives.life * 100;
+                SceneManager.LoadScene("FinishedLevel");
+            }
         }
         if (Input.GetKeyDown(KeyCode.RightArrow)) { // go to next line to edit when enter key is pressed
             NextLine();
         } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
             PreviousLine();
-        } else if (Input.GetKeyDown(KeyCode.Return) && !hasStretched) {
+        } else if (Input.GetKeyDown(KeyCode.Return) && !hasStretched && activeLine.transform.localScale.y <= 1) {
             hasStretched = true;
             if (stretched.ContainsKey(activeLine)) {
                 stretched.Remove(activeLine);
@@ -121,7 +138,44 @@ public class ActiveLineChecker : MonoBehaviour {
                     if (activeLine.transform.rotation.eulerAngles.z != (float) angle) {
                         activeLine.transform.rotation = Quaternion.Euler(0, 0, (float) angle);
                     }
-                    // TODO: Stretch object & input rotation
+                    if (hasStretched) {
+                        bool answeredCorrect = false;
+                        StringBuilder stringB = new StringBuilder();
+                        for (int i = 0; i < calculation.Length-1; i++) {
+                            stringB.Append(calculation[i]).Append(" ");
+                        }
+                        if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) {
+                            float beginPoint = ParseNumber(calculation[2]);
+                            int roundedY = (int) Math.Floor(activeLine.transform.position.y);
+                            Debug.Log(beginPoint + " " + roundedY);
+                            if (beginPoint == roundedY && calculation[1].Equals("+")) {
+                                answeredCorrect = true;
+                            } else {
+                                if (roundedY < 0) {
+                                    if (calculation[1].Equals("-")) {
+                                        beginPoint *= -1;
+                                        if (beginPoint == roundedY) {
+                                            answeredCorrect = true;
+                                        }
+                                    }
+                                }
+                                if (!subtractedLife && !answeredCorrect) {
+                                    Lives.life--;
+                                    subtractedLife = true;
+                                }
+                            }
+                        }
+                        InputField text = GameObject.Find("FormulaField").GetComponent<InputField>();
+                        int index = text.text.IndexOf(calculation[2]);
+                        text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") 
+                            : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
+                        if (answeredCorrect) {
+                            if (hasBCorrect.ContainsKey(activeLine)) {
+                                hasBCorrect.Remove(activeLine);
+                                hasBCorrect.Add(activeLine, true);
+                            }
+                        }
+                    }
                 } else {
                     //Debug.Log("Invalid formula!");
                 }
@@ -139,6 +193,14 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     private static Dictionary<GameObject, bool> BuildStretchedDictionary() {
+        Dictionary<GameObject, bool> returnItem = new Dictionary<GameObject, bool>();
+        for (int i = 0; i < lines.Length; i++) {
+            returnItem.Add(lines[i].gameObject, false);
+        }
+        return returnItem;
+    }
+
+    private static Dictionary<GameObject, bool> BuildBDictionary() {
         Dictionary<GameObject, bool> returnItem = new Dictionary<GameObject, bool>();
         for (int i = 0; i < lines.Length; i++) {
             returnItem.Add(lines[i].gameObject, false);
@@ -169,6 +231,9 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         hasStretched = false;
         ClearFields(oldLine, activeLine.gameObject);
+        if (!hitTheirGoal.Contains(activeLine)) {
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 0, 0);
+        }
     }
 
     void PreviousLine() { // method that handles going back to previous line
@@ -192,6 +257,9 @@ public class ActiveLineChecker : MonoBehaviour {
             hasStretched = false;
         }
         ClearFields(oldLine, activeLine.gameObject);
+        if (hitTheirGoal.Contains(activeLine)) {
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
+        }
     }
 
     private void ClearFields(GameObject oldLine, GameObject newLine) {
