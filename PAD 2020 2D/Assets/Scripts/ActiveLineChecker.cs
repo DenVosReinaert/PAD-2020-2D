@@ -41,6 +41,8 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     void Update() {
+        PipeCheck();
+        HouseCheck();
         if (hitTheirGoal.Contains(activeLine) && hasBCorrect.TryGetValue(activeLine, out bool isBCorrect)) {
             if (isBCorrect) {
                 if (formulas.TryGetValue(activeLine, out string formula)) {
@@ -62,9 +64,10 @@ public class ActiveLineChecker : MonoBehaviour {
             if (completedLines == 4) {
                 money.moneyAmount += Lives.life * 100;
                 SceneManager.LoadScene("FinishedLevel");
+                Lives.ResetLives();
             }
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow)) { // go to next line to edit when enter key is pressed
+        if (Input.GetKeyDown(KeyCode.RightArrow) && hitTheirGoal.Contains(activeLine)) { // go to next line to edit when enter key is pressed
             NextLine();
         } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
             PreviousLine();
@@ -85,7 +88,7 @@ public class ActiveLineChecker : MonoBehaviour {
             hasStretched = false;
             Lives.life--;
         }
-        
+
         if (activeLine.transform.localScale.y > 1 && !hasStretched) {
             Vector3 newScale = activeLine.transform.localScale;
             if (!hitTheirGoal.Contains(activeLine)) {
@@ -141,7 +144,7 @@ public class ActiveLineChecker : MonoBehaviour {
                     if (hasStretched) {
                         bool answeredCorrect = false;
                         StringBuilder stringB = new StringBuilder();
-                        for (int i = 0; i < calculation.Length-1; i++) {
+                        for (int i = 0; i < calculation.Length - 1; i++) {
                             stringB.Append(calculation[i]).Append(" ");
                         }
                         if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) {
@@ -167,7 +170,7 @@ public class ActiveLineChecker : MonoBehaviour {
                         }
                         InputField text = GameObject.Find("FormulaField").GetComponent<InputField>();
                         int index = text.text.IndexOf(calculation[2]);
-                        text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") 
+                        text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>")
                             : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
                         if (answeredCorrect) {
                             if (hasBCorrect.ContainsKey(activeLine)) {
@@ -178,6 +181,37 @@ public class ActiveLineChecker : MonoBehaviour {
                     }
                 } else {
                     //Debug.Log("Invalid formula!");
+                }
+            }
+        }
+    }
+
+    private void PipeCheck() {
+        for (int i = 0; i < lines.Length; i++) {
+            if (lines[i].gameObject != activeLine && !hitTheirGoal.Contains(lines[i].gameObject)) {
+                lines[i].gameObject.SetActive(false);
+            } else {
+                lines[i].gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void HouseCheck() {
+        for (int i = 0; i < lines.Length; i++) {
+            if (i <= 2) {
+                if (!hitTheirGoal.Contains(lines[i].gameObject)) {
+                    Waypoints.waypoints[i].gameObject.SetActive(false);
+                } else {
+                    Waypoints.waypoints[i].gameObject.SetActive(true);
+                }
+                if (lines[i].gameObject == activeLine && !hitTheirGoal.Contains(lines[i].gameObject)) {
+                    Waypoints.waypoints[i].gameObject.SetActive(true);
+                }
+            } else {
+                if (lines[i].gameObject == lines[3].gameObject && lines[i].gameObject == activeLine) {
+                    Objectives.objectives[1].gameObject.SetActive(true);
+                } else {
+                    Objectives.objectives[1].gameObject.SetActive(false);
                 }
             }
         }
@@ -387,27 +421,19 @@ public class ActiveLineChecker : MonoBehaviour {
             mathOperator = formula[1];
 
         }
-        if (formula.Length > 3)
-        {
+        if (formula.Length > 3) {
             b = ParseNumber(formula[2]);
         }
 
         float x = 0;
 
-        if (activeLine.gameObject.name.Equals("LineDrawer"))
-        {
+        if (activeLine.gameObject.name.Equals("LineDrawer")) {
             x = Waypoints.waypoints[0].position.x;
-        }
-        else if (activeLine.gameObject.name.Equals("Waypoints1T2"))
-        {
+        } else if (activeLine.gameObject.name.Equals("Waypoints1T2")) {
             x = Waypoints.waypoints[1].position.x;
-        }
-        else if (activeLine.gameObject.name.Equals("Waypoints2T3"))
-        { 
+        } else if (activeLine.gameObject.name.Equals("Waypoints2T3")) {
             x = Waypoints.waypoints[2].position.x;
-        }
-        else if (activeLine.gameObject.name.Equals("GoalLine"))
-        {
+        } else if (activeLine.gameObject.name.Equals("GoalLine")) {
             x = Objectives.objectives[1].position.x;
         }
 

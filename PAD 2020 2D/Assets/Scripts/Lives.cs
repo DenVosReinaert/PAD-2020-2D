@@ -9,32 +9,39 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class Lives : MonoBehaviour
-{
+public class Lives : MonoBehaviour {
 
-    public GameObject[] hearts;
+    private static GameObject[] hearts;
     public static int life = 5;
 
+    private void Awake() {
+        hearts = new GameObject[transform.childCount];
+        for (int i = 0; i < hearts.Length; i++) {
+            hearts[i] = transform.GetChild(i).gameObject;
+        }
+    }
 
-    void Update()
-    {
-        if (life < 1)
-        {
-            Destroy(hearts[0].gameObject);
+
+    void Update() {
+        if (life < 1) {
+            hearts[0].SetActive(false);
             SceneManager.LoadScene("FinishedLevel");
-            life = 5;
-        }
-        else if (life < 2)
-        {
-            Destroy(hearts[1].gameObject);
-        }
-        else if (life < 3)
-        {
-            Destroy(hearts[2].gameObject);
+            ResetLives();
+        } else if (life < 2) {
+            hearts[1].SetActive(false);
+        } else if (life < 3) {
+            hearts[2].SetActive(false);
         } else if (life < 4) {
-            Destroy(hearts[3].gameObject);
+            hearts[3].SetActive(false);
         } else if (life < 5) {
-            Destroy(hearts[4].gameObject);
+            hearts[4].SetActive(false);
+        }
+    }
+
+    public static void ResetLives() {
+        life = 5;
+        for (int i = 0; i < hearts.Length; i++) {
+            hearts[i].SetActive(true);
         }
     }
 
