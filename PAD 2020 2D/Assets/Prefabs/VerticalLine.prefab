@@ -96,7 +96,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
-      key1: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
+      key1: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0.3137255}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -141,7 +141,6 @@ GameObject:
   - component: {fileID: 6321751826438613117}
   - component: {fileID: 6321751826438613107}
   - component: {fileID: 6321751826438613116}
-  - component: {fileID: 5604392053709607}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -319,11 +318,3 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6321751826438613107}
   m_maskType: 0
---- !u!33 &5604392053709607
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6321751826438613118}
-  m_Mesh: {fileID: 0}

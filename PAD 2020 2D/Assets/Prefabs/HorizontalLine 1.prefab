@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7240069494841779196}
   - component: {fileID: 7240069494841779198}
   - component: {fileID: 7240069494841779199}
-  - component: {fileID: 7656717324697331601}
   m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -173,13 +172,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0.39324737, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 7240069494841779199}
-    characterCount: 0
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
-    wordCount: 0
+    wordCount: 1
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -187,14 +186,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7240069494841779198}
   m_maskType: 0
---- !u!33 &7656717324697331601
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7240069494841779197}
-  m_Mesh: {fileID: 0}
 --- !u!1 &7240069495983518390
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +282,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
-      key1: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
+      key1: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 0.3137255}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
