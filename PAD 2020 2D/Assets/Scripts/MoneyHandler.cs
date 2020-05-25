@@ -7,6 +7,6 @@ public class MoneyHandler : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        GameObject.Find("Money").GetComponent<Text>().text = money.prefix + money.moneyAmount;
+        GameObject.Find("Money").GetComponent<Text>().text = money.prefix + PlayerPrefs.GetInt("Money");
     }
 }

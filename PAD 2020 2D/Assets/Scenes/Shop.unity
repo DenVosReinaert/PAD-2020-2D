@@ -281,6 +281,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 42335913}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: BoughtRedPipe
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &42335915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,7 +491,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 102051015}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 926813537}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: SetActive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Silver
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &102051015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,7 +777,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 200814905}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1438235857}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: SetActive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Blue
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &200814905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,6 +1057,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 368608806}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: BoughtGoldPipe
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1385,7 +1433,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 521950394}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 368608806}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: SetActive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Gold
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &521950394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1505,7 +1565,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 801138431}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 926813537}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: SetActive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Green
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &801138431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1926,6 +1998,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 926813537}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: BoughtSilverPipe
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &926813539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2045,7 +2129,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 942989696}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 42335913}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: SetActive
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Red
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &942989696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2994,6 +3090,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1438235857}
+        m_TargetAssemblyTypeName: money, Assembly-CSharp
+        m_MethodName: BoughtBluePipe
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1438235859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3750,8 +3858,8 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 1
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Money: $0'
 --- !u!114 &2117840041

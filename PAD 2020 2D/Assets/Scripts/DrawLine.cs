@@ -14,13 +14,30 @@ public class DrawLine : MonoBehaviour
 
     void Awake() {
         CheckPosition();
+        switch (PlayerPrefs.GetString("Active")) {
+            case "Silver":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/silver pipe");
+                break;
+            case "Blue":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/blue pipe");
+                break;
+            case "Red":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/red pipe");
+                break;
+            case "Gold":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/gold pipe");
+                break;
+            default:
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/pipe");
+                break;
+        }
     }
 
     void Update() {
         CheckPosition();
     }
        
-    public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) {
+    public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) { // return formula from two points
         string formule;
         // algebra
         // y = ax + b, where a = dy / dx
@@ -50,11 +67,11 @@ public class DrawLine : MonoBehaviour
         return GetFormulaFromVector(new Vector2(startPos.x, startPos.y), new Vector2(endPos.x, endPos.y));
     }
 
-    public static float getCurrentCoefficient() {
+    public static float GetCurrentCoefficient() { // return current coefficient
         return currentCoefficient;
     }
 
-    private void CheckPosition() {
+    private void CheckPosition() { // set the first position
         if (gameObject.name.Equals("LineDrawer")) {
             transform.position = new Vector3(Objectives.objectives[0].position.x, Objectives.objectives[0].position.y, 0);
         } else if (gameObject.name.Equals("Waypoints1T2")) {

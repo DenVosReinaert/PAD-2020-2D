@@ -7,13 +7,11 @@ public class shopbuttons : MonoBehaviour
 {
     public Button buybutton;
 
-    void Update()
-    {
-        if (money.moneyAmount >= 2000)
+    void Update() {
+        if (PlayerPrefs.GetInt("Money") >= 2000) {
             buybutton.interactable = true;
-
-        else
-
+        } else {
             buybutton.interactable = false;
+        }
     }
 }
