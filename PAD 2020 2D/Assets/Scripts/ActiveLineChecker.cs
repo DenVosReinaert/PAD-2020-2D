@@ -48,9 +48,11 @@ public class ActiveLineChecker : MonoBehaviour {
             if (isBCorrect) {
                 if (formulas.TryGetValue(activeLine, out string formula)) {
                     GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
+                    SoundManagerScript.PlaySound("Right");
                 }
             } else { // if not, the line isnt complete so remove it from the 'hit their goal' list.
                 hitTheirGoal.Remove(activeLine);
+                SoundManagerScript.PlaySound("Wrong");
             }
         }
         if (hitTheirGoal.Count == 4) { // if the list contains 4 objects, the level is complete
