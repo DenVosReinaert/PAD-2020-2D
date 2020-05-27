@@ -1,7 +1,2 @@
 Base path: 'C:/Users/leonl/Documents/Unity/Versions/2020.2.0a9/Editor/Data', plugins path 'C:/Users/leonl/Documents/Unity/Versions/2020.2.0a9/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
-Cmd: compileComputeKernel
-  error: 1 plat 4 at Fireworks.vfx(87): comma expression used where a vector constructor may have been intended
-  api=4 insize=8868 outsize=2210 ok=1
-Cmd: compileComputeKernel
-  api=4 insize=8271 outsize=2218 ok=1
