@@ -6,9 +6,13 @@ using UnityEngine.UI;
 public class CollisionChecker : MonoBehaviour {
 
     private ParticleSystem particle; // particle system
+    private ParticleSystem spark; // particle system
+
+    public CameraShake cameraShake;
 
     void Awake() {
         particle = gameObject.GetComponentInChildren<ParticleSystem>(); // retrieve the particles system
+        spark = GameObject.Find("Sparks").GetComponent<ParticleSystem>();
     }
 
     void OnCollisionEnter2D(Collision2D other) { // this method is triggered when a collider enters a rigidbody
@@ -41,6 +45,7 @@ public class CollisionChecker : MonoBehaviour {
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Waypoints.waypoints[0].position); // particles
+                    StartCoroutine(cameraShake.Shake(.15f, .4f));
                 }
             }
             GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0); // set color for the text
@@ -69,6 +74,7 @@ public class CollisionChecker : MonoBehaviour {
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Waypoints.waypoints[1].position); // particles
+                    StartCoroutine(cameraShake.Shake(.15f, .4f));
                 }
             }
             GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
@@ -97,6 +103,7 @@ public class CollisionChecker : MonoBehaviour {
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Waypoints.waypoints[2].position); // particles
+                    StartCoroutine(cameraShake.Shake(.15f, .4f));
                 }
             }
             GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
@@ -125,6 +132,7 @@ public class CollisionChecker : MonoBehaviour {
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Objectives.objectives[1].position);
+                    StartCoroutine(cameraShake.Shake(.15f, .4f));
                 }
             }
             GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
@@ -133,6 +141,9 @@ public class CollisionChecker : MonoBehaviour {
         void Explode(Vector2 position) {
             particle.transform.position = position; // set position
             particle.Play(); // play
+
+            spark.transform.position = position;
+            spark.Play();
         }
     }
 }

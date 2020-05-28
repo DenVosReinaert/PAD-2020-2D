@@ -25,7 +25,7 @@ public class Lives : MonoBehaviour {
     void Update() {
         if (life < 1) {
             hearts[0].SetActive(false);
-            SceneManager.LoadScene("FinishedLevel");
+            SceneManager.LoadScene("LossScreen");
             ResetLives();
         } else if (life < 2) {
             hearts[1].SetActive(false);
