@@ -116,7 +116,7 @@ public class ActiveLineChecker : MonoBehaviour {
                     } else if (!calculation[0].StartsWith("-") && !calculation[0].StartsWith("+")) {
                         coefficient = ParseNumber(calculation[0]);
                     }
-                    KeyValuePair<float, float> points = GetPoints(calculation); // get the coordinates from the second point of the line
+                    //KeyValuePair<float, float> points = GetPoints(calculation); // get the coordinates from the second point of the line
                     double angle = 0;
                     Vector2 targetPosition = new Vector2(0, 0);
                     switch (activeLine.name) { // target position of the is different for each line
@@ -152,7 +152,10 @@ public class ActiveLineChecker : MonoBehaviour {
                         }
                         if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) { // check if the B isn't empty and parsable
                             float beginPoint = ParseNumber(calculation[2]); // parse the number
-                            int roundedY = (int) Math.Round(activeLine.transform.position.y); // round y position to the floor
+                            float y = activeLine.transform.position.y;
+                            y = y < 0 ? y + 0.3f : y - 0.3f;
+                            int roundedY = (int) Math.Round(y); // round y position to the floor
+                            //Debug.Log(roundedY + " " + y);
                             if (beginPoint == roundedY && calculation[1].Equals("+")) { // if parsed number && the rounded y are the same and the math operator is '+'
                                 answeredCorrect = true; // than player answered correctly
                             } else {
@@ -171,9 +174,13 @@ public class ActiveLineChecker : MonoBehaviour {
                             }
                         }
                         InputField text = GameObject.Find("FormulaField").GetComponent<InputField>(); // get the text
-                        int index = text.text.IndexOf(calculation[2]); // get the index number of where the B is
-                        text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") // replace it with green color if correct, red if incorrect
-                            : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
+                        if (newFormula.EndsWith("x")) {
+                            answeredCorrect = true;
+                        } else {
+                            int index = text.text.IndexOf(calculation[2]); // get the index number of where the B is
+                            text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") // replace it with green color if correct, red if incorrect
+                                : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
+                        }
                         if (answeredCorrect) { // if answered correct, update in the list
                             if (hasBCorrect.ContainsKey(activeLine)) {
                                 hasBCorrect.Remove(activeLine);
@@ -399,6 +406,9 @@ public class ActiveLineChecker : MonoBehaviour {
                 }
             }
         } else { // form: -1x-3
+            if (formula.EndsWith("x")) {
+                formula = formula + " + 0";
+            }
             StringBuilder sb = new StringBuilder();
             char[] formule = formula.ToCharArray(); // if there's no spaces at all, make the spaces yourself
             for (int i = 0; i < formule.Length; i++) {
