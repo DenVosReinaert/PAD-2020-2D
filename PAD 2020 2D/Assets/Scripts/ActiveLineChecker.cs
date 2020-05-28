@@ -44,6 +44,161 @@ public class ActiveLineChecker : MonoBehaviour {
     void Update() {
         PipeCheck();
         HouseCheck();
+        CheckHit();
+        CheckInput();
+        HandleStretching();
+        string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula
+        // formula parsing for reading
+        if (!hitTheirGoal.Contains(activeLine)) { // check if the line isn't already completed
+            if (!string.IsNullOrEmpty(newFormula)) { // check if the string is empty
+                if (CanParseFormula(newFormula)) { // check if the string if parsable and their arent any weird characters
+                    string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
+                    formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
+                    formulas.Add(activeLine, GetStringFromArray(calculation));
+                    HandleAngle(calculation);
+                    if (hasStretched) {
+                        CheckB(newFormula, calculation);
+                    }
+                } else {
+                    //Debug.Log("Invalid formula!");
+                }
+            }
+        }
+    }
+
+    private void HandleAngle(string[] calculation) {
+        coefficient = GetSlopeFromFormula(calculation);
+        double angle = 0;
+        Vector2 targetPosition = GetTargetPosition();
+        double yDifference = targetPosition.y - activeLine.transform.position.y; // get the difference in y
+        if (coefficient != 0) { // if the slope isn't 0, change the angle
+            angle = GetAngle(calculation, yDifference);
+        }
+        angle += 90; // add 90 to force the player to only go to the right
+        if (activeLine.transform.rotation.eulerAngles.z != (float) angle) { // if the angle is different, than what it should be, change it.
+            activeLine.transform.rotation = Quaternion.Euler(0, 0, (float) angle);
+        }
+    }
+
+    private void CheckB(string newFormula, string[] calculation) {
+        bool answeredCorrect = false; // hasnt checked yet
+        if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) { // check if the B isn't empty and parsable
+            float beginPoint = ParseNumber(calculation[2]); // parse the number
+            float differenceX = activeLine.transform.position.x * -1; // difference between position and 0 x, when x is zero the line crosses the y-axis
+            float yPos = coefficient * differenceX;  // multiply difference to get the the difference
+            int yPosRounded = (int) Mathf.Round(yPos);
+            int roundedY = (int) activeLine.transform.position.y + (int) yPosRounded;
+            Debug.Log(roundedY + " " + yPos + " " + yPosRounded + " " + coefficient + " " + differenceX);
+            if (beginPoint == roundedY && calculation[1].Equals("+")) { // if parsed number && the rounded y are the same and the math operator is '+'
+                answeredCorrect = true; // than player answered correctly
+            } else {
+                if (roundedY < 0) { // else if rounded y is lower than 0
+                    if (calculation[1].Equals("-")) { // and if the math operator is '-'
+                        beginPoint *= -1; // multiply by -1 so that the separate number is positive so it looks like '1x - 3' instead of '1x + -3'
+                        if (beginPoint == roundedY) { // if it then equals each other answered correctly
+                            answeredCorrect = true;
+                        }
+                    }
+                }
+                if (!subtractedLife && !answeredCorrect) { // if there isn't a life subtracted and hasn't answered correctly,
+                    Lives.life--; // subtract a life and make the boolean true so the player doesnt die in 5 frames
+                    subtractedLife = true;
+                }
+            }
+        }
+        InputField text = GameObject.Find("FormulaField").GetComponent<InputField>(); // get the text
+        if (newFormula.EndsWith("x")) {
+            answeredCorrect = true;
+        } else {
+            int index = text.text.IndexOf(calculation[2]); // get the index number of where the B is
+            text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") // replace it with green color if correct, red if incorrect
+                : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
+        }
+        if (answeredCorrect) { // if answered correct, update in the list
+            if (hasBCorrect.ContainsKey(activeLine)) {
+                hasBCorrect.Remove(activeLine);
+                hasBCorrect.Add(activeLine, true);
+            }
+        }
+    }
+
+    private float GetSlopeFromFormula(string[] formula) {
+        float slope = 0;
+        if (formula[0].EndsWith("x")) { // this part retrieves the coefficient (slope) from the formula
+            slope = ParseNumber(formula[0].Substring(0, formula[0].Length - 1));
+        } else if (!formula[0].StartsWith("-") && !formula[0].StartsWith("+")) {
+            slope = ParseNumber(formula[0]);
+        }
+        return slope;
+    }
+
+    private string GetStringFromArray(string[] array) {
+        StringBuilder sb = new StringBuilder(); // build the string for the dictionary
+        for (int i = 0; i < array.Length; i++) {
+            sb.Append(array[i]).Append(" ");
+        }
+        return sb.ToString().Trim();
+    }
+
+    private Vector2 GetTargetPosition() {
+        Vector2 targetPosition;
+        switch (activeLine.name) { // target position of the is different for each line
+            case "LineDrawer": // so that is handled here, for every line (switched by name) the target position is changed accordingly
+                targetPosition = Waypoints.waypoints[0].position;
+                break;
+            case "Waypoints1T2":
+                targetPosition = Waypoints.waypoints[1].position;
+                break;
+            case "Waypoints2T3":
+                targetPosition = Waypoints.waypoints[2].position;
+                break;
+            case "GoalLine":
+                targetPosition = Objectives.objectives[1].position;
+                break;
+            default:
+                targetPosition = new Vector2(0, 0);
+                Debug.Log("Incorrect active line name."); // if somehow the name is not any of the lines, print to the console because that shouldnt happen
+                break;
+        }
+        return targetPosition;
+    }
+
+    private void CheckInput() {
+        if (Input.GetKeyDown(KeyCode.RightArrow) && hitTheirGoal.Contains(activeLine)) { // go to next line to edit when enter key is pressed
+            NextLine();
+        } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
+            PreviousLine();
+        } else if (Input.GetKeyDown(KeyCode.Return) && !hasStretched && activeLine.transform.localScale.y <= 1) { // this is for when the player presses enter so that the pipe will stretched
+            hasStretched = true;
+            if (stretched.ContainsKey(activeLine)) {
+                stretched.Remove(activeLine);
+                stretched.Add(activeLine, true); // lines is stretched, so change the boolean
+            }
+        }
+    }
+
+    private void HandleStretching() {
+        if (hasStretched && activeLine.transform.localScale.y < _MaxScale) { // line hasn't reached its max yet, so it must grow
+            Vector3 newScale = activeLine.transform.localScale;
+            if (!hitTheirGoal.Contains(activeLine)) {
+                newScale.y += _ScaleIncrement;
+            }
+            activeLine.transform.localScale = newScale;
+        } else if (hasStretched && activeLine.transform.localScale.y >= _MaxScale) { // it has reached its max, now its time to shrink
+            hasStretched = false;
+            Lives.life--; // also remove a live because the pipe missed its goal
+        }
+
+        if (activeLine.transform.localScale.y > 1 && !hasStretched) { // the actual stretching part is done here
+            Vector3 newScale = activeLine.transform.localScale; // this is to avoid creating a new empty vector3
+            if (!hitTheirGoal.Contains(activeLine)) {
+                newScale.y -= _ScaleDecrement;
+            }
+            activeLine.transform.localScale = newScale;
+        }
+    }
+
+    private void CheckHit() {
         if (hitTheirGoal.Contains(activeLine) && hasBCorrect.TryGetValue(activeLine, out bool isBCorrect)) { // if current pipe has hit their goal, and their B is correct than make the text uneditable.
             if (isBCorrect) {
                 if (formulas.TryGetValue(activeLine, out string formula)) {
@@ -68,129 +223,6 @@ public class ActiveLineChecker : MonoBehaviour {
                 PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + Lives.life * 100);
                 SceneManager.LoadScene("WinScreen");
                 Lives.ResetLives();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow) && hitTheirGoal.Contains(activeLine)) { // go to next line to edit when enter key is pressed
-            NextLine();
-        } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
-            PreviousLine();
-        } else if (Input.GetKeyDown(KeyCode.Return) && !hasStretched && activeLine.transform.localScale.y <= 1) { // this is for when the player presses enter so that the pipe will stretched
-            hasStretched = true;
-            if (stretched.ContainsKey(activeLine)) {
-                stretched.Remove(activeLine);
-                stretched.Add(activeLine, true); // lines is stretched, so change the boolean
-            }
-        }
-        if (hasStretched && activeLine.transform.localScale.y < _MaxScale) { // line hasn't reached its max yet, so it must grow
-            Vector3 newScale = activeLine.transform.localScale;
-            if (!hitTheirGoal.Contains(activeLine)) {
-                newScale.y += _ScaleIncrement;
-            }
-            activeLine.transform.localScale = newScale;
-        } else if (hasStretched && activeLine.transform.localScale.y >= _MaxScale) { // it has reached its max, now its time to shrink
-            hasStretched = false;
-            Lives.life--; // also remove a live because the pipe missed its goal
-        }
-
-        if (activeLine.transform.localScale.y > 1 && !hasStretched) { // the actual stretching part is done here
-            Vector3 newScale = activeLine.transform.localScale; // this is to avoid creating a new empty vector3
-            if (!hitTheirGoal.Contains(activeLine)) {
-                newScale.y -= _ScaleDecrement;
-            }
-            activeLine.transform.localScale = newScale;
-        }
-        string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula
-        // formula parsing for reading
-        if (!hitTheirGoal.Contains(activeLine)) { // check if the line isn't already completed
-            if (!string.IsNullOrEmpty(newFormula)) { // check if the string is empty
-                if (CanParseFormula(newFormula)) { // check if the string if parsable and their arent any weird characters
-                    string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
-                    formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
-                    StringBuilder sb = new StringBuilder(); // build the string for the dictionary
-                    for (int i = 0; i < calculation.Length; i++) {
-                        sb.Append(calculation[i]).Append(" ");
-                    }
-                    formulas.Add(activeLine, sb.ToString().Trim()); // add and trim it of course
-                    if (calculation[0].EndsWith("x")) { // this part retrieves the coefficient (slope) from the formula
-                        coefficient = ParseNumber(calculation[0].Substring(0, calculation[0].Length - 1));
-                    } else if (!calculation[0].StartsWith("-") && !calculation[0].StartsWith("+")) {
-                        coefficient = ParseNumber(calculation[0]);
-                    }
-                    //KeyValuePair<float, float> points = GetPoints(calculation); // get the coordinates from the second point of the line
-                    double angle = 0;
-                    Vector2 targetPosition = new Vector2(0, 0);
-                    switch (activeLine.name) { // target position of the is different for each line
-                        case "LineDrawer": // so that is handled here, for every line (switched by name) the target position is changed accordingly
-                            targetPosition = Waypoints.waypoints[0].position;
-                            break;
-                        case "Waypoints1T2":
-                            targetPosition = Waypoints.waypoints[1].position;
-                            break;
-                        case "Waypoints2T3":
-                            targetPosition = Waypoints.waypoints[2].position;
-                            break;
-                        case "GoalLine":
-                            targetPosition = Objectives.objectives[1].position;
-                            break;
-                        default:
-                            Debug.Log("Incorrect active line name."); // if somehow the name is not any of the lines, print to the console because that shouldnt happen
-                            break;
-                    }
-                    double yDifference = targetPosition.y - activeLine.transform.position.y; // get the difference in y
-                    if (coefficient != 0) { // if the slope isn't 0, change the angle
-                        angle = GetAngle(calculation, yDifference);
-                    }
-                    angle += 90; // add 90 to force the player to only go to the right
-                    if (activeLine.transform.rotation.eulerAngles.z != (float) angle) { // if the angle is different, than what it should be, change it.
-                        activeLine.transform.rotation = Quaternion.Euler(0, 0, (float) angle);
-                    }
-                    if (hasStretched) {
-                        bool answeredCorrect = false; // hasnt checked yet
-                        StringBuilder stringB = new StringBuilder();
-                        for (int i = 0; i < calculation.Length - 1; i++) {
-                            stringB.Append(calculation[i]).Append(" ");
-                        }
-                        if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) { // check if the B isn't empty and parsable
-                            float beginPoint = ParseNumber(calculation[2]); // parse the number
-                            float y = activeLine.transform.position.y;
-                            y = y < 0 ? y + 0.3f : y - 0.3f;
-                            int roundedY = (int) Math.Round(y); // round y position to the floor
-                            //Debug.Log(roundedY + " " + y);
-                            if (beginPoint == roundedY && calculation[1].Equals("+")) { // if parsed number && the rounded y are the same and the math operator is '+'
-                                answeredCorrect = true; // than player answered correctly
-                            } else {
-                                if (roundedY < 0) { // else if rounded y is lower than 0
-                                    if (calculation[1].Equals("-")) { // and if the math operator is '-'
-                                        beginPoint *= -1; // multiply by -1 so that the separate number is positive so it looks like '1x - 3' instead of '1x + -3'
-                                        if (beginPoint == roundedY) { // if it then equals each other answered correctly
-                                            answeredCorrect = true;
-                                        }
-                                    }
-                                }
-                                if (!subtractedLife && !answeredCorrect) { // if there isn't a life subtracted and hasn't answered correctly,
-                                    Lives.life--; // subtract a life and make the boolean true so the player doesnt die in 5 frames
-                                    subtractedLife = true;
-                                }
-                            }
-                        }
-                        InputField text = GameObject.Find("FormulaField").GetComponent<InputField>(); // get the text
-                        if (newFormula.EndsWith("x")) {
-                            answeredCorrect = true;
-                        } else {
-                            int index = text.text.IndexOf(calculation[2]); // get the index number of where the B is
-                            text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") // replace it with green color if correct, red if incorrect
-                                : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
-                        }
-                        if (answeredCorrect) { // if answered correct, update in the list
-                            if (hasBCorrect.ContainsKey(activeLine)) {
-                                hasBCorrect.Remove(activeLine);
-                                hasBCorrect.Add(activeLine, true);
-                            }
-                        }
-                    }
-                } else {
-                    //Debug.Log("Invalid formula!");
-                }
             }
         }
     }

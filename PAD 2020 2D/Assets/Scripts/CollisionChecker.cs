@@ -25,23 +25,7 @@ public class CollisionChecker : MonoBehaviour {
                 return; // if collider is not equal to the first waypoint, return
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine); // add the line to the list that it hit their goal
-            switch (PlayerPrefs.GetString("Active")) { // color according to pipe
-                case "Silver":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Blue":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Red":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Gold":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                default:
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 100f / 255f, 0); 
-                    break;
-            }
+            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Waypoints.waypoints[0].position); // particles
@@ -54,23 +38,7 @@ public class CollisionChecker : MonoBehaviour {
                 return;
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
-            switch (PlayerPrefs.GetString("Active")) { // color according to pipe
-                case "Silver":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Blue":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Red":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Gold":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                default:
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 100f / 255f, 0);
-                    break;
-            }
+            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Waypoints.waypoints[1].position); // particles
@@ -83,23 +51,7 @@ public class CollisionChecker : MonoBehaviour {
                 return;
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
-            switch (PlayerPrefs.GetString("Active")) { // color according to pipe
-                case "Silver":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Blue":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Red":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Gold":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                default:
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 100f / 255f, 0);
-                    break;
-            }
+            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Waypoints.waypoints[2].position); // particles
@@ -112,23 +64,7 @@ public class CollisionChecker : MonoBehaviour {
                 return;
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
-            switch (PlayerPrefs.GetString("Active")) { // color according to pipe
-                case "Silver":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Blue":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Red":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                case "Gold":
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
-                    break;
-                default:
-                    gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 100f / 255f, 0);
-                    break;
-            }
+            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
                     Explode(Objectives.objectives[1].position);
@@ -144,6 +80,26 @@ public class CollisionChecker : MonoBehaviour {
 
             spark.transform.position = position;
             spark.Play();
+        }
+    }
+
+    private void SetColor() {
+        switch (PlayerPrefs.GetString("Active")) { // color according to pipe
+            case "Silver":
+                gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
+                break;
+            case "Blue":
+                gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
+                break;
+            case "Red":
+                gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
+                break;
+            case "Gold":
+                gameObject.GetComponent<SpriteRenderer>().color = new Color(0.7169812f, 0.7169812f, 0.7169812f);
+                break;
+            default:
+                gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 100f / 255f, 0);
+                break;
         }
     }
 }

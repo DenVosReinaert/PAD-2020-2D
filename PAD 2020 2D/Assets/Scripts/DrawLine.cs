@@ -14,23 +14,7 @@ public class DrawLine : MonoBehaviour
 
     void Awake() {
         CheckPosition();
-        switch (PlayerPrefs.GetString("Active")) {
-            case "Silver":
-                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/silver pipe");
-                break;
-            case "Blue":
-                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/blue pipe");
-                break;
-            case "Red":
-                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/red pipe");
-                break;
-            case "Gold":
-                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/gold pipe");
-                break;
-            default:
-                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/pipe");
-                break;
-        }
+        SetTexture();
     }
 
     void Update() {
@@ -71,15 +55,43 @@ public class DrawLine : MonoBehaviour
         return currentCoefficient;
     }
 
-    private void CheckPosition() { // set the first position
+    private void CheckPosition() { // set the position
         if (gameObject.name.Equals("LineDrawer")) {
-            transform.position = new Vector3(Objectives.objectives[0].position.x, Objectives.objectives[0].position.y, 0);
+            int x = (int) Mathf.Round(Objectives.objectives[0].position.x);
+            int y = (int) Mathf.Round(Objectives.objectives[0].position.y);
+            gameObject.transform.position = new Vector3(x, y, 0);
         } else if (gameObject.name.Equals("Waypoints1T2")) {
-            transform.position = new Vector3(Waypoints.waypoints[0].position.x, Waypoints.waypoints[0].position.y - 0.5f, 0);
+            int x = (int) Mathf.Round(Waypoints.waypoints[0].position.x) + 1;
+            int y = (int) Mathf.Round(Waypoints.waypoints[0].position.y);
+            transform.position = new Vector3(x, y, 0);
         } else if (gameObject.name.Equals("Waypoints2T3")) {
-            transform.position = new Vector3(Waypoints.waypoints[1].position.x, Waypoints.waypoints[1].position.y - 0.5f, 0);
+            int x = (int) Mathf.Round(Waypoints.waypoints[1].position.x) + 1;
+            int y = (int) Mathf.Round(Waypoints.waypoints[1].position.y);
+            transform.position = new Vector3(x, y, 0);
         } else if (gameObject.name.Equals("GoalLine")) {
-            transform.position = new Vector3(Waypoints.waypoints[2].position.x, Waypoints.waypoints[2].position.y - 0.5f, 0);
+            int x = (int) Mathf.Round(Waypoints.waypoints[2].position.x) + 1;
+            int y = (int) Mathf.Round(Waypoints.waypoints[2].position.y);
+            transform.position = new Vector3(x, y, 0);
+        }
+    }
+
+    private void SetTexture() {
+        switch (PlayerPrefs.GetString("Active")) {
+            case "Silver":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/silver pipe");
+                break;
+            case "Blue":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/blue pipe");
+                break;
+            case "Red":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/red pipe");
+                break;
+            case "Gold":
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/gold pipe");
+                break;
+            default:
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/pipe");
+                break;
         }
     }
 }

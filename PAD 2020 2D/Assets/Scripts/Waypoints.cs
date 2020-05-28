@@ -8,7 +8,7 @@ public class Waypoints : MonoBehaviour {
     public static Transform[] waypoints; // array of waypoints
     public int z = 0;
 
-    private const int _ScreenSizeX = 22; // size of our screen
+    private const int _ScreenSizeX = 20; // size of our screen
     private const int _ScreenDivide = 5; // used to divide the screen in segments
     private const int _ScreenOffset = 11; // offset
     private const int _YMin = -5; // minimum of y
@@ -87,6 +87,8 @@ public class Waypoints : MonoBehaviour {
                 }
             }
         }
+        rando.x = (int) Mathf.Round(rando.x);
+        rando.y = (int) Mathf.Round(rando.y);
         return rando;
     }
 
@@ -129,6 +131,8 @@ public class Waypoints : MonoBehaviour {
                 }
             }
         }
+        rando.x = (int) Mathf.Round(rando.x);
+        rando.y = (int) Mathf.Round(rando.y);
         return rando;
     }
 
@@ -171,6 +175,8 @@ public class Waypoints : MonoBehaviour {
                 }
             }
         }
+        rando.x = (int) Mathf.Round(rando.x);
+        rando.y = (int) Mathf.Round(rando.y);
         return rando;
     }
 }
