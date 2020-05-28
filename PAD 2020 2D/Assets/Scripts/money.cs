@@ -10,8 +10,8 @@ public class money : MonoBehaviour {
 
     public Text moneyText;
 
-    void Awake() {
-        updateMoneyUI();
+    void Awake() { // replaces the buybutton for a select button when a pipe has been bought, and removes the price amount text
+        updateMoneyUI(); 
         if (HasSilverPipe() && name.Equals("BuyButton1")) {
             GameObject.Find("BuyButton1").SetActive(false);
             GameObject.Find("Price1").SetActive(false);
@@ -50,7 +50,7 @@ public class money : MonoBehaviour {
         }
     }
 
-    void Update() {
+    void Update() { // bought pipes can be selected and the selected pipe button becomes green
         updateMoneyUI();
         switch (GetActive()) {
             case "Silver":
@@ -94,7 +94,7 @@ public class money : MonoBehaviour {
         }
     }
 
-    public void addMoney(int xAmount){
+    public void addMoney(int xAmount){ 
         PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + xAmount);
         updateMoneyUI();
     }
@@ -104,7 +104,7 @@ public class money : MonoBehaviour {
         updateMoneyUI();
     }
 
-    void updateMoneyUI(){
+    void updateMoneyUI(){ //stores the money the players has earned
         moneyText.text = prefix + PlayerPrefs.GetInt("Money").ToString();
     }
 
@@ -112,6 +112,7 @@ public class money : MonoBehaviour {
         PlayerPrefs.DeleteAll();
     }
 
+    // stores the pipes the player has already unlocked
     public void BoughtSilverPipe() {
         PlayerPrefs.SetString("Silver", "true");
     }

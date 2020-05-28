@@ -11,22 +11,22 @@ using UnityEngine.UIElements;
 
 public class Lives : MonoBehaviour {
 
-    private static GameObject[] hearts;
+    private static GameObject[] hearts;// array of gameobjects hearts
     public static int life = 5;
 
-    private void Awake() {
-        hearts = new GameObject[transform.childCount];
-        for (int i = 0; i < hearts.Length; i++) {
+    private void Awake() { 
+        hearts = new GameObject[transform.childCount]; // array size = hearts/lifes
+        for (int i = 0; i < hearts.Length; i++) { // get data from childs
             hearts[i] = transform.GetChild(i).gameObject;
         }
     }
 
 
-    void Update() {
+    void Update() { // if life = -1 one heart disapears
         if (life < 1) {
             hearts[0].SetActive(false);
-            SceneManager.LoadScene("LossScreen");
-            ResetLives();
+            SceneManager.LoadScene("LossScreen"); // at 0 lifes lossscreen 
+            ResetLives(); // resets lifes and displayed hearts back to 5 for retry or next game
         } else if (life < 2) {
             hearts[1].SetActive(false);
         } else if (life < 3) {
@@ -39,8 +39,8 @@ public class Lives : MonoBehaviour {
     }
 
     public static void ResetLives() {
-        life = 5;
-        for (int i = 0; i < hearts.Length; i++) {
+        life = 5; // restets lifes back to 5
+        for (int i = 0; i < hearts.Length; i++) { // restets displayed hearts to 5
             hearts[i].SetActive(true);
         }
     }
