@@ -88,7 +88,6 @@ public class ActiveLineChecker : MonoBehaviour {
             float yPos = coefficient * differenceX;  // multiply difference to get the the difference
             int yPosRounded = (int) Mathf.Round(yPos);
             int roundedY = (int) activeLine.transform.position.y + (int) yPosRounded;
-            Debug.Log(roundedY + " " + yPos + " " + yPosRounded + " " + coefficient + " " + differenceX);
             if (beginPoint == roundedY && calculation[1].Equals("+")) { // if parsed number && the rounded y are the same and the math operator is '+'
                 answeredCorrect = true; // than player answered correctly
             } else {
@@ -101,7 +100,7 @@ public class ActiveLineChecker : MonoBehaviour {
                     }
                 }
                 if (!subtractedLife && !answeredCorrect) { // if there isn't a life subtracted and hasn't answered correctly,
-                    Lives.life--; // subtract a life and make the boolean true so the player doesnt die in 5 frames
+                    Lives.DecrementLife(); // subtract a life and make the boolean true so the player doesnt die in 5 frames
                     subtractedLife = true;
                 }
             }
@@ -110,9 +109,20 @@ public class ActiveLineChecker : MonoBehaviour {
         if (newFormula.EndsWith("x")) {
             answeredCorrect = true;
         } else {
-            int index = text.text.IndexOf(calculation[2]); // get the index number of where the B is
-            text.text = answeredCorrect ? text.text.Replace(text.text[index].ToString(), "<color=green>" + text.text[index].ToString() + "</color>") // replace it with green color if correct, red if incorrect
-                : text.text.Replace(text.text[index].ToString(), "<color=red>" + text.text[index].ToString() + "</color>");
+            int index = text.text.IndexOf(calculation[2], 2); // get the index number of where the B is
+            Debug.Log(index);
+            if (index > 2) {
+                string newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + "</color>" : "<color=red>" + text.text[index].ToString() + "</color>";
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < calculation.Length; i++) {
+                    if (calculation[i].Equals(calculation[2])) {
+                        sb.Append(newB).Append(" ");
+                    } else {
+                        sb.Append(calculation[i]).Append(" ");
+                    }
+                }
+                text.text = sb.ToString().Trim();
+            }
         }
         if (answeredCorrect) { // if answered correct, update in the list
             if (hasBCorrect.ContainsKey(activeLine)) {
@@ -186,7 +196,8 @@ public class ActiveLineChecker : MonoBehaviour {
             activeLine.transform.localScale = newScale;
         } else if (hasStretched && activeLine.transform.localScale.y >= _MaxScale) { // it has reached its max, now its time to shrink
             hasStretched = false;
-            Lives.life--; // also remove a live because the pipe missed its goal
+            Lives.DecrementLife(); ; // also remove a live because the pipe missed its goal
+            GameObject.Find("Formule").GetComponent<Text>().color = new Color(1, 0, 0);
         }
 
         if (activeLine.transform.localScale.y > 1 && !hasStretched) { // the actual stretching part is done here

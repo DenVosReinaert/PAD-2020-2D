@@ -12,6 +12,8 @@ public class DrawLine : MonoBehaviour
     public bool rightLine = false;
     public GameObject cube;
 
+    private const int _ZPosition = -2;
+
     void Awake() {
         CheckPosition();
         SetTexture();
@@ -19,6 +21,7 @@ public class DrawLine : MonoBehaviour
 
     void Update() {
         CheckPosition();
+        GameObject.Find("Y Positie").GetComponent<InputField>().text = ActiveLineChecker.activeLine.transform.position.y + "";
     }
        
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) { // return formula from two points
@@ -59,19 +62,19 @@ public class DrawLine : MonoBehaviour
         if (gameObject.name.Equals("LineDrawer")) {
             int x = (int) Mathf.Round(Objectives.objectives[0].position.x);
             int y = (int) Mathf.Round(Objectives.objectives[0].position.y);
-            gameObject.transform.position = new Vector3(x, y, 0);
+            gameObject.transform.position = new Vector3(x, y, _ZPosition);
         } else if (gameObject.name.Equals("Waypoints1T2")) {
             int x = (int) Mathf.Round(Waypoints.waypoints[0].position.x) + 1;
             int y = (int) Mathf.Round(Waypoints.waypoints[0].position.y);
-            transform.position = new Vector3(x, y, 0);
+            transform.position = new Vector3(x, y, _ZPosition);
         } else if (gameObject.name.Equals("Waypoints2T3")) {
             int x = (int) Mathf.Round(Waypoints.waypoints[1].position.x) + 1;
             int y = (int) Mathf.Round(Waypoints.waypoints[1].position.y);
-            transform.position = new Vector3(x, y, 0);
+            transform.position = new Vector3(x, y, _ZPosition);
         } else if (gameObject.name.Equals("GoalLine")) {
             int x = (int) Mathf.Round(Waypoints.waypoints[2].position.x) + 1;
             int y = (int) Mathf.Round(Waypoints.waypoints[2].position.y);
-            transform.position = new Vector3(x, y, 0);
+            transform.position = new Vector3(x, y, _ZPosition);
         }
     }
 

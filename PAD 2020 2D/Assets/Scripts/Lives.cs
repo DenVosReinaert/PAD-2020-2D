@@ -12,6 +12,8 @@ using UnityEngine.UIElements;
 public class Lives : MonoBehaviour {
 
     private static GameObject[] hearts;// array of gameobjects hearts
+    private static float time;
+    private static bool canLoseLife;
     public static int life = 5;
 
     private void Awake() { 
@@ -36,6 +38,9 @@ public class Lives : MonoBehaviour {
         } else if (life < 5) {
             hearts[4].SetActive(false);
         }
+        if (time <= Time.time-1) {
+            canLoseLife = true;
+        }
     }
 
     public static void ResetLives() {
@@ -48,5 +53,13 @@ public class Lives : MonoBehaviour {
     public void loselife(int d) // d = damage
     {
         life -= d;
+    }
+
+    public static void DecrementLife() {
+        if (canLoseLife) {
+            life--;
+            time = Time.time;
+            canLoseLife = false;
+        }
     }
 }

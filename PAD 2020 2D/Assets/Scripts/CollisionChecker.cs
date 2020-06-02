@@ -25,9 +25,9 @@ public class CollisionChecker : MonoBehaviour {
                 return; // if collider is not equal to the first waypoint, return
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine); // add the line to the list that it hit their goal
-            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
+                    SetColor();
                     Explode(Waypoints.waypoints[0].position); // particles
                     StartCoroutine(cameraShake.Shake(.15f, .4f)); // Camera shake
                 }
@@ -38,9 +38,9 @@ public class CollisionChecker : MonoBehaviour {
                 return;
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
-            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
+                    SetColor();
                     Explode(Waypoints.waypoints[1].position); // particles
                     StartCoroutine(cameraShake.Shake(.15f, .4f)); // Camera shake
                 }
@@ -51,9 +51,9 @@ public class CollisionChecker : MonoBehaviour {
                 return;
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
-            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
+                    SetColor();
                     Explode(Waypoints.waypoints[2].position); // particles
                     StartCoroutine(cameraShake.Shake(.15f, .4f)); // Camera shake
                 }
@@ -64,9 +64,9 @@ public class CollisionChecker : MonoBehaviour {
                 return;
             }
             ActiveLineChecker.hitTheirGoal.Add(ActiveLineChecker.activeLine);
-            SetColor();
             if (ActiveLineChecker.hasBCorrect.TryGetValue(ActiveLineChecker.activeLine, out bool value)) {
                 if (value) {
+                    SetColor();
                     Explode(Objectives.objectives[1].position); // particles
                     StartCoroutine(cameraShake.Shake(.15f, .4f)); // Camera shake
                 }

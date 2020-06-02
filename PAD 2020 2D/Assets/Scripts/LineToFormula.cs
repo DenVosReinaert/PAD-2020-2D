@@ -17,6 +17,30 @@ public class LineToFormula : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (Input.GetKeyDown(KeyCode.Backspace)) {
+            bool replaced = false;
+            string input = inputField.text;
+            if (input.Contains("<color=green>")) {
+                input = input.Replace("<color=green>", "");
+                replaced = true;
+            } 
+            if (input.Contains("<color=red>")) {
+                input = input.Replace("<color=red>", "");
+                replaced = true;
+            } 
+            if (input.Contains("</color>")) {
+                input = input.Replace("</color>", "");
+                replaced = true;
+            }
+            if (input.Contains("</color")) {
+                input = input.Replace("</color", "");
+                replaced = true;
+            }
+            if (input.Length > 1 && replaced) {
+                input = input.Substring(0, input.Length - 1);
+            }
+            inputField.text = input;
+        }
         if (!string.IsNullOrEmpty(inputField.text)) { // if input is not null, set the placeholder to nothing
             GameObject.Find("Placeholder").GetComponent<Text>().text = "";
         } else { // if it is, set it to the basic formula

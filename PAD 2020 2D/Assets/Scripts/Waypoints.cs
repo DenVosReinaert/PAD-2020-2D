@@ -8,9 +8,12 @@ public class Waypoints : MonoBehaviour {
     public static Transform[] waypoints; // array of waypoints
     public int z = 0;
 
-    private const int _ScreenSizeX = 20; // size of our screen
-    private const int _ScreenDivide = 5; // used to divide the screen in segments
-    private const int _ScreenOffset = 11; // offset
+    private const int _Positie1MaxX = -4; // all the boundaries of each house
+    private const int _Positie1MinX = -7;
+    private const int _Positie2MaxX = 2;
+    private const int _Positie2MinX = -2;
+    private const int _Positie3MaxX = 7;
+    private const int _Positie3MinX = 4;
     private const int _YMin = -5; // minimum of y
     private const int _YMax = 5; // maximum of y
 
@@ -34,38 +37,50 @@ public class Waypoints : MonoBehaviour {
     }
 
     private Vector3 RandomPosition1() {
-        float xMaxBoundary = _ScreenSizeX / _ScreenDivide * 2 - _ScreenOffset; // boundaries of the screen
-        float xMinBoundary = _ScreenSizeX / _ScreenDivide - _ScreenOffset;
-        float yMaxBoundary = _YMax;
-        float yMinBoundary = _YMin;
-        Vector3 rando = new Vector3(Random.Range(xMinBoundary, xMaxBoundary), Random.Range(yMinBoundary, yMaxBoundary), z); // create random position based on screen boundaries
+        Vector3 rando = new Vector3(Random.Range(_Positie1MinX, _Positie1MaxX), Random.Range(_YMin, _YMax), z); // create random position based on screen boundaries
         foreach (Transform hazard in Hazards.hazards) { // make sure random position doesnt have collision with a hazard
             SpriteRenderer texture = hazard.GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) { // move it away from the hazard if it has
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie1MinX)) { // move it away from the hazard if it has
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie1MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
         foreach (Transform objective in Objectives.objectives) {
             SpriteRenderer texture = objective.GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) { // move it away from the objectives if it has
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie1MinX)) { // move it away from the objectives if it has
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie1MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
@@ -75,15 +90,23 @@ public class Waypoints : MonoBehaviour {
             }
             SpriteRenderer texture = waypoints[i].GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) { // move them away from the other waypoint(s)
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie1MinX)) {  // move them away from the other waypoint(s)
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie1MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
@@ -93,41 +116,76 @@ public class Waypoints : MonoBehaviour {
     }
 
     private Vector3 RandomPosition2() { // repeat
-        float xMaxBoundary = _ScreenSizeX / _ScreenDivide * 3 - _ScreenOffset;
-        float xMinBoundary = _ScreenSizeX / _ScreenDivide * 2- _ScreenOffset;
-        float yMaxBoundary = _YMax;
-        float yMinBoundary = _YMin;
-        Vector3 rando = new Vector3(Random.Range(xMinBoundary, xMaxBoundary), Random.Range(yMinBoundary, yMaxBoundary), z);
-        foreach (Transform hazard in Hazards.hazards) {
+        Vector3 rando = new Vector3(Random.Range(_Positie2MinX, _Positie2MaxX), Random.Range(_YMin, _YMax), z);
+        foreach (Transform hazard in Hazards.hazards) { // make sure random position doesnt have collision with a hazard
             SpriteRenderer texture = hazard.GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) {
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie2MinX)) { // move it away from the hazard if it has
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie2MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
-        for (int i = 0; i < waypoints.Length; i++) {
+        foreach (Transform objective in Objectives.objectives) {
+            SpriteRenderer texture = objective.GetComponent<SpriteRenderer>();
+            while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie2MinX)) { // move it away from the objectives if it has
+                    rando.x++;
+                } else {
+                    if (rando.x + texture.bounds.center.x > _Positie2MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
+                }
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
+                    rando.y++;
+                } else {
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < waypoints.Length; i++) { // make sure the waypoint doesnt have collision with other waypoints
             if (waypoints[i] == null) {
                 continue;
             }
             SpriteRenderer texture = waypoints[i].GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) {
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie2MinX)) {  // move them away from the other waypoint(s)
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie2MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
@@ -137,41 +195,76 @@ public class Waypoints : MonoBehaviour {
     }
 
     private Vector3 RandomPosition3() {
-        float xMaxBoundary = _ScreenSizeX / _ScreenDivide * 4 - _ScreenOffset;
-        float xMinBoundary = _ScreenSizeX / _ScreenDivide * 3 - _ScreenOffset;
-        float yMaxBoundary = _YMax;
-        float yMinBoundary = _YMin;
-        Vector3 rando = new Vector3(Random.Range(xMinBoundary, xMaxBoundary), Random.Range(yMinBoundary, yMaxBoundary), z);
-        foreach (Transform hazard in Hazards.hazards) {
+        Vector3 rando = new Vector3(Random.Range(_Positie3MinX, _Positie3MaxX), Random.Range(_YMin, _YMax), z);
+        foreach (Transform hazard in Hazards.hazards) { // make sure random position doesnt have collision with a hazard
             SpriteRenderer texture = hazard.GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) {
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie3MinX)) { // move it away from the hazard if it has
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie3MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
-        for (int i = 0; i < waypoints.Length; i++) {
+        foreach (Transform objective in Objectives.objectives) {
+            SpriteRenderer texture = objective.GetComponent<SpriteRenderer>();
+            while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie3MinX)) { // move it away from the objectives if it has
+                    rando.x++;
+                } else {
+                    if (rando.x + texture.bounds.center.x > _Positie3MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
+                }
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
+                    rando.y++;
+                } else {
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < waypoints.Length; i++) { // make sure the waypoint doesnt have collision with other waypoints
             if (waypoints[i] == null) {
                 continue;
             }
             SpriteRenderer texture = waypoints[i].GetComponent<SpriteRenderer>();
             while (rando.x > texture.bounds.min.x && rando.x < texture.bounds.max.x && rando.y > texture.bounds.min.y && rando.y < texture.bounds.max.y) {
-                if (rando.x > texture.bounds.center.x) {
+                if (rando.x > texture.bounds.center.x && !(rando.x - texture.bounds.center.x < _Positie3MinX)) {  // move them away from the other waypoint(s)
                     rando.x++;
                 } else {
-                    rando.x--;
+                    if (rando.x + texture.bounds.center.x > _Positie3MaxX) {
+                        rando.x++;
+                    } else {
+                        rando.x--;
+                    }
                 }
-                if (rando.y > texture.bounds.center.y) {
+                if (rando.y > texture.bounds.center.y && !(rando.y - texture.bounds.center.y < _YMin)) {
                     rando.y++;
                 } else {
-                    rando.y--;
+                    if (rando.y + texture.bounds.center.y > _YMax) {
+                        rando.y++;
+                    } else {
+                        rando.y--;
+                    }
                 }
             }
         }
