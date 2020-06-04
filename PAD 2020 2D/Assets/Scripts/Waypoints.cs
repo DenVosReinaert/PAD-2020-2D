@@ -22,15 +22,23 @@ public class Waypoints : MonoBehaviour {
         for (int i = 0; i < waypoints.Length; i++) { // get data from children
             waypoints[i] = transform.GetChild(i);
         }
-        if (!Interscene.instance.retryLevel) { // if retry is false, give each waypoint a random position on the screen
-            GameObject.Find("WP").transform.position = RandomPosition1();
-            GameObject.Find("WP (1)").transform.position = RandomPosition2();
-            GameObject.Find("WP (2)").transform.position = RandomPosition3();
-        } else { // else, get the position from Interscene script
-            GameObject.Find("WP").transform.position = Interscene.instance.waypoints[0];
-            GameObject.Find("WP (1)").transform.position = Interscene.instance.waypoints[1];
-            GameObject.Find("WP (2)").transform.position = Interscene.instance.waypoints[2];
+
+        if (SceneManager.GetActiveScene().name.Equals("Level")) {
+            if (!Interscene.instance.retryLevel) { // if retry is false, give each waypoint a random position on the screen
+                GameObject.Find("WP").transform.position = RandomPosition1();
+                GameObject.Find("WP (1)").transform.position = RandomPosition2();
+                GameObject.Find("WP (2)").transform.position = RandomPosition3();
+            } else { // else, get the position from Interscene script
+                GameObject.Find("WP").transform.position = Interscene.instance.waypoints[0];
+                GameObject.Find("WP (1)").transform.position = Interscene.instance.waypoints[1];
+                GameObject.Find("WP (2)").transform.position = Interscene.instance.waypoints[2];
+            }
+        } else if (SceneManager.GetActiveScene().name.Equals("Tutorial")) {
+            GameObject.Find("WP").transform.position = new Vector3(-6, -3, -2);
+            GameObject.Find("WP (1)").transform.position = new Vector3(0, 2, -2);
+            GameObject.Find("WP (2)").transform.position = new Vector3(3, -4, -2);
         }
+
         for (int i = 0; i < Interscene.instance.waypoints.Length; i++) { // store positions in interscene
             Interscene.instance.waypoints[i] = waypoints[i].position;
         }
