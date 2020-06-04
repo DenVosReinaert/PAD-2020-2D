@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using UnityEditor;
@@ -109,10 +110,25 @@ public class ActiveLineChecker : MonoBehaviour {
         if (newFormula.EndsWith("x")) {
             answeredCorrect = true;
         } else {
-            int index = text.text.IndexOf(calculation[2], 2); // get the index number of where the B is
-            Debug.Log(index);
+            int index = 2;
+            int secondIndex = 3;
+            bool longB = false;
+            if (calculation[2].Length == 1) {
+                index = text.text.IndexOf(calculation[2], 2); // get the index number of where the B is
+            } else if (calculation[2].Length == 2) {
+                char[] numbers = calculation[2].ToCharArray();
+                index = text.text.IndexOf(numbers[0], 2); // get the index number of where the B is
+                secondIndex = text.text.IndexOf(numbers[1], 2);
+                longB = true;
+            }
             if (index > 2) {
-                string newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + "</color>" : "<color=red>" + text.text[index].ToString() + "</color>";
+                string newB;
+                if (longB) {
+                    newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>" 
+                        : "<color=red>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>";
+                } else {
+                   newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + "</color>" : "<color=red>" + text.text[index].ToString() + "</color>";
+                }
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < calculation.Length; i++) {
                     if (calculation[i].Equals(calculation[2])) {
