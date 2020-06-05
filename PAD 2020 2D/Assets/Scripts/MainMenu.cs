@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("Level"); // When the button Play is pushed the scene loads to Level
+        SceneManager.LoadScene("Tutorial"); // When the button Play is pushed the scene loads to Level
     }
 
     public void Shop()
