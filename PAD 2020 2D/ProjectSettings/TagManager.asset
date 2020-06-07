@@ -53,3 +53,6 @@ TagManager:
   - name: lines
     uniqueID: 935568835
     locked: 0
+  - name: BlackFade
+    uniqueID: 2339838797
+    locked: 0
