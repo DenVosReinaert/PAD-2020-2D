@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BlackFade : MonoBehaviour
 {
 
-    public float fadespeed = 0.1f;
+    public float fadespeed = 0.5f;
 
     public  IEnumerator FadeOutObject()
     {
