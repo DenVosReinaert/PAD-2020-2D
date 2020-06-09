@@ -247,6 +247,7 @@ public class ActiveLineChecker : MonoBehaviour {
                 }
             }
             if (completedLines == 4) { // if B is also correct, give the player money according to their lives, reset the lives and go to the finishedlevel scene.
+                //Interscene.instance.PutData
                 PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + Lives.life * 100);
                 SceneManager.LoadScene("WinScreen");
                 Lives.ResetLives();
