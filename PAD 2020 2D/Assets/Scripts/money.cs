@@ -94,22 +94,22 @@ public class money : MonoBehaviour {
         }
     }
 
-    public void addMoney(int xAmount){ 
-        PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") + xAmount);
+    public void addMoney(int xAmount){
+        int newMoney = Interscene.instance.money + xAmount;
+        Interscene.instance.money = newMoney;
+        Interscene.instance.PutData(Interscene.instance.userName, newMoney);
         updateMoneyUI();
     }
 
     public void ReduceMoney(int yAmount) {
-        PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - yAmount);
+        int newMoney = Interscene.instance.money - yAmount;
+        Interscene.instance.money = newMoney;
+        Interscene.instance.PutData(Interscene.instance.userName, newMoney);        
         updateMoneyUI();
     }
 
     void updateMoneyUI(){ //stores the money the players has earned
-        moneyText.text = prefix + PlayerPrefs.GetInt("Money").ToString();
-    }
-
-    void Reset() {
-        PlayerPrefs.DeleteAll();
+        moneyText.text = prefix + Interscene.instance.money.ToString();
     }
 
     // stores the pipes the player has already unlocked

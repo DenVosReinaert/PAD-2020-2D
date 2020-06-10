@@ -19,9 +19,9 @@ MonoBehaviour:
     width: 2544
     height: 1341
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Scene
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 875, y: 542}
+  m_MinSize: {x: 875, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 0
 --- !u!114 &2
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_MinSize: {x: 677, y: 492}
   m_MaxSize: {x: 14001, y: 14042}
   vertical: 0
-  controlID: 47
+  controlID: 39
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_MinSize: {x: 402, y: 492}
   m_MaxSize: {x: 10001, y: 14042}
   vertical: 1
-  controlID: 48
+  controlID: 40
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 402, y: 221}
   m_MaxSize: {x: 8002, y: 4021}
   vertical: 0
-  controlID: 49
+  controlID: 41
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -179,18 +179,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
+  m_Name: SceneHierarchyWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 338
-    height: 845
+    width: 255
+    height: 620
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 13}
+  m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 13}
   m_Selected: 0
@@ -212,11 +212,11 @@ MonoBehaviour:
     serializedVersion: 2
     x: 338
     y: 0
-    width: 1551
-    height: 845
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 14}
+    width: 1171
+    height: 620
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 14}
   - {fileID: 12}
@@ -395,9 +395,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 0e400000
       m_LastClickedID: 0
-      m_ExpandedIDs: 46faffff
+      m_ExpandedIDs: baebfffff2faffff5a6400009a640000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -458,9 +458,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -1.8406811, y: 0.04719635, z: -7.8671703}
+    m_Target: {x: -11.577638, y: 2.316061, z: -769.264}
     speed: 2
-    m_Value: {x: -1.8406811, y: 0.04719635, z: -7.8671703}
+    m_Value: {x: -10.616118, y: 2.1209702, z: -769.16364}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -511,9 +511,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 7.5009484
+    m_Target: 23.299427
     speed: 2
-    m_Value: 7.5009484
+    m_Value: 22.296103
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -577,13 +577,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Sprites
+    - Assets/Scripts
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 49
   m_LastFolders:
-  - Assets/Resources/Sprites
+  - Assets/Scripts
   m_LastFoldersGridSize: 49
   m_LastProjectPath: C:\Users\jackW\OneDrive\Documenten\GitHub\PAD-2020-2D\PAD 2020
     2D
@@ -591,9 +591,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 56510000
-    m_LastClickedID: 20822
-    m_ExpandedIDs: 000000006447000066470000684700006a4700006c4700006e470000265100005651000000ca9a3b
+    m_SelectedIDs: a44f0000
+    m_LastClickedID: 20388
+    m_ExpandedIDs: 000000000447000006470000084700000a4700000c4700000e47000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -621,7 +621,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000006447000066470000684700006a4700006c4700006e470000
+    m_ExpandedIDs: 000000000447000006470000084700000a4700000c4700000e470000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -646,8 +646,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: 0e400000
+    m_LastClickedInstanceID: 16398
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:

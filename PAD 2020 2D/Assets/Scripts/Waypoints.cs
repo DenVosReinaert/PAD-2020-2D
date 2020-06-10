@@ -12,7 +12,7 @@ public class Waypoints : MonoBehaviour {
     private const int _Positie1MinX = -7;
     private const int _Positie2MaxX = 2;
     private const int _Positie2MinX = -2;
-    private const int _Positie3MaxX = 7;
+    private const int _Positie3MaxX = 6;
     private const int _Positie3MinX = 4;
     private const int _YMin = -5; // minimum of y
     private const int _YMax = 5; // maximum of y
