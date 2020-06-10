@@ -28,6 +28,7 @@ public class RetryMenu : MonoBehaviour {
     public void QuitGame()
     {
         Debug.Log("QuitGame");
+        Interscene.instance.PutData(Interscene.instance.userName, Interscene.instance.money);
         Application.Quit(); // when the Quit button is pushed the application closes
     }
 }

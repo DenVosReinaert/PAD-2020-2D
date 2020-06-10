@@ -13,7 +13,12 @@ public class Interscene : MonoBehaviour {
     public Vector3[] waypoints; // waypoints, they are stored here as well because this script doesnt get destroyed and helps with retrying or going to the next level
     public string userName;
     public int money;
-    public bool hasData;
+
+    private bool hasData;
+    private bool checkData;
+    private bool loginCheck;
+    private bool checkedDB;
+    private float time;
 
     void Awake() {
         if (instance == null) { // if instance is null, set it to this and make it so this script doesnt get destroyed on load. Also give size to waypoints
@@ -21,12 +26,18 @@ public class Interscene : MonoBehaviour {
             DontDestroyOnLoad(this);
             waypoints = new Vector3[3];
         } else if (instance != this) { // if instance is not equal to this, destroy.
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 
     public void Update() {
-        //Debug.Log(userName + " " + money);
+        if (!checkData && loginCheck && !checkedDB) {
+            CheckDB(userName);
+        }
+        if (Time.time - time >= 10) {
+            //checkedDB = false;
+        }
+        Debug.Log(money);
     }
 
     public void Login() {
@@ -36,15 +47,19 @@ public class Interscene : MonoBehaviour {
             return;
         }
         userName = name;
-        if (HasData(userName)) {
-            Debug.Log("has");
-            GetData(userName);
+        StartCoroutine(CheckForData(userName));
+        loginCheck = true;
+        SceneManager.LoadScene("Menu");
+    }
+
+    private void CheckDB(string userName) {
+        if (hasData) {
+            RetrieveData(userName);
         } else {
-            Debug.Log("doesnt");
             PutData(userName, 0);
         }
-        // if has data then retrieve, if not enter in db
-        //SceneManager.LoadScene("Menu");
+        time = Time.time;
+        checkedDB = true;
     }
 
     public void PutData(string userName, int money) {
@@ -62,22 +77,16 @@ public class Interscene : MonoBehaviour {
             } else {
                 string response = tables.downloadHandler.text;
                 if (response.StartsWith("Successfully")) {
-                    Debug.Log("Successfully updated MySQL score. (" + name + ", " + money + ")");
+                    Debug.Log("Successfully updated MySQL score. (" + userName + ", " + money + ")");
                 } else if (response.StartsWith("Could")) {
-                    Debug.Log("Failed to update MySQL score. (" + name + ", " + money + ")");
+                    Debug.Log("Failed to update MySQL score. (" + userName + ", " + money + ")");
                 }
             }
         }
     }
 
-    private bool HasData(string userName) {
-        CheckForData(userName);
-        /*bool interim = hasData;
-        hasData = false;*/
-        return hasData;
-    }
-
     IEnumerator CheckForData(string userName) {
+        checkData = true;
         WWWForm form = new WWWForm();
         form.AddField("name", userName);
         using (UnityWebRequest moneySQL = UnityWebRequest.Post("https://oege.ie.hva.nl/~baasdr/HasData.php", form)) {
@@ -86,15 +95,20 @@ public class Interscene : MonoBehaviour {
                 Debug.Log(moneySQL.error);
             } else {
                 string response = moneySQL.downloadHandler.text;
-                Debug.Log(response);
                 if (response.StartsWith("Successfully")) {
-                    Debug.Log(name + " has data!");
+                    Debug.Log(userName + " has data!");
                     hasData = true;
                 } else if (response.StartsWith("Could")) {
-                    Debug.Log("Failed to check for data in MySQL. (" + name + ")");
+                    Debug.Log("Failed to check for data in MySQL. (" + userName + ")");
+                    hasData = false;
                 }
             }
         }
+        checkData = false;
+    }
+
+    public void RetrieveData(string userName) {
+        StartCoroutine(GetData(userName));
     }
 
     private IEnumerator GetData(string userName) {
@@ -111,9 +125,9 @@ public class Interscene : MonoBehaviour {
                     if (CanParse(splitData[1])) {
                         money = Parse(splitData[1]);
                     }
-                    Debug.Log(name + " has moneyz (" + money + ")!");
+                    Debug.Log(userName + " has moneyz (" + money + ")!");
                 } else if (response.StartsWith("Could")) {
-                    Debug.Log("Failed to check for data in MySQL. (" + name + ")");
+                    Debug.Log("Failed to check for data in MySQL. (" + userName + ")");
                 }
             }
         }
