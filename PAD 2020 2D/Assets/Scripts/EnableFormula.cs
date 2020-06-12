@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class EnableFormula : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public bool tutorialComplete = false;
+
+    //The player is not allowed to input formula before the tutorial has been completed.
     void Start()
     {
         
@@ -13,6 +15,9 @@ public class EnableFormula : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (tutorialComplete == true)
+        {
+
+        }
     }
 }
