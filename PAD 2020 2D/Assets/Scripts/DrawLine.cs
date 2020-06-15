@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class DrawLine : MonoBehaviour
-{
+public class DrawLine : MonoBehaviour {
     private static float currentCoefficient = 0;
     public Vector3 dir;
     public Vector2 Middle = new Vector2(0, 0);
@@ -21,9 +21,15 @@ public class DrawLine : MonoBehaviour
 
     void Update() {
         CheckPosition();
-        GameObject.Find("Y Positie").GetComponent<InputField>().text = ActiveLineChecker.activeLine.transform.position.y + "";
+        bool canRun = true;
+        if (!SceneManager.GetActiveScene().name.Equals("TutorialIntro") || (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted)) {
+            canRun = false;
+        }
+        if (canRun) {
+            GameObject.Find("Y Positie").GetComponent<InputField>().text = ActiveLineChecker.activeLine.transform.position.y + "";
+        }
     }
-       
+
     public static string GetFormulaFromVector(Vector2 startPos, Vector2 endPos) { // return formula from two points
         string formule;
         // algebra

@@ -605,3 +605,4 @@ D:\Unity\Projects GIT\PAD-2020-2D\PAD 2020 2D\Temp\bin\Debug\UnityEditor.TestRun
 D:\Unity\Projects GIT\PAD-2020-2D\PAD 2020 2D\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 D:\Unity\Projects GIT\PAD-2020-2D\PAD 2020 2D\obj\Debug\Assembly-CSharp.dll
 D:\Unity\Projects GIT\PAD-2020-2D\PAD 2020 2D\obj\Debug\Assembly-CSharp.pdb
+D:\Unity\Projects GIT\PAD-2020-2D\PAD 2020 2D\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

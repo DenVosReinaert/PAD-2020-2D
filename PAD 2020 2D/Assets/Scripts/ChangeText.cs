@@ -21,6 +21,7 @@ public class ChangeText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(activeText);
         GameObject.Find("HintText").GetComponent<Text>().text = activeText;
     }
 
@@ -32,7 +33,7 @@ public class ChangeText : MonoBehaviour
             {
                 if (value.Equals(activeText) && i != 2)
                 {
-                    if (allText.TryGetValue(i++, out string newValue))
+                    if (allText.TryGetValue(i+1, out string newValue))
                     {
                         activeText = newValue;
                         break;
@@ -50,7 +51,7 @@ public class ChangeText : MonoBehaviour
             {
                 if (value.Equals(activeText) && i != 0)
                 {
-                    if (allText.TryGetValue(i--, out string newValue))
+                    if (allText.TryGetValue(i-1, out string newValue))
                     {
                         activeText = newValue;
                         break;
