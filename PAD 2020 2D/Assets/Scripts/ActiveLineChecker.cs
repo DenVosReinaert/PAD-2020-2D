@@ -150,7 +150,7 @@ public class ActiveLineChecker : MonoBehaviour {
         return sb.ToString().Trim();
     }
 
-    private Vector2 GetTargetPosition() {
+    public static Vector2 GetTargetPosition() {
         Vector2 targetPosition;
         switch (activeLine.name) { // target position of the is different for each line
             case "LineDrawer": // so that is handled here, for every line (switched by name) the target position is changed accordingly
