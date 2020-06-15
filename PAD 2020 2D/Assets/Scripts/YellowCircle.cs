@@ -14,6 +14,7 @@ public class YellowCircle : MonoBehaviour
     public float linewidth = 0.2f;
     public float radius;
     public bool circleFillScreen;
+    public static GameObject Circle;
 
     private LineRenderer lineRenderer;
 
@@ -21,7 +22,6 @@ public class YellowCircle : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material.color = Color.yellow;
-        //SetupCircle();
         lines = new Transform[transform.childCount]; // size of the array is the amount of children
         for (int i = 0; i < lines.Length; i++)
         { // get the data from the children and put it in the array
@@ -32,6 +32,7 @@ public class YellowCircle : MonoBehaviour
     private void Update()
     {
         SetupCircle();
+        ChangeCirclePos();
     }
 
     private void SetupCircle()
@@ -77,13 +78,23 @@ public class YellowCircle : MonoBehaviour
 
     //switch the circle to new position after switching to next line
     void ChangeCirclePos()
+        //by doing it like this we go trought them in line
     {
-        for (int i = 0; i < lines.Length; i++)
+        if (Waypoints.waypoints[0].gameObject.activeInHierarchy)
         {
-            if (Waypoints.waypoints[i].gameObject)
-            {
-
-            }
+            this.transform.position = Waypoints.waypoints[0].position;
+        }
+        if (Waypoints.waypoints[1].gameObject.activeInHierarchy)
+        {
+            this.transform.position = Waypoints.waypoints[1].position;
+        }
+        if (Waypoints.waypoints[2].gameObject.activeInHierarchy)
+        {
+            this.transform.position = Waypoints.waypoints[2].position;
+        }
+        if (Objectives.objectives[1].gameObject.activeInHierarchy)
+        {
+            this.transform.position = Objectives.objectives[1].position;
         }
     }
 }
