@@ -48,20 +48,38 @@ public class ActiveLineChecker : MonoBehaviour {
         CheckHit();
         CheckInput();
         HandleStretching();
-        string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula
-        // formula parsing for reading
-        if (!hitTheirGoal.Contains(activeLine)) { // check if the line isn't already completed
-            if (!string.IsNullOrEmpty(newFormula)) { // check if the string is empty
-                if (CanParseFormula(newFormula)) { // check if the string if parsable and their arent any weird characters
-                    string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
-                    formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
-                    formulas.Add(activeLine, GetStringFromArray(calculation));
-                    HandleAngle(calculation);
-                    if (hasStretched) {
-                        CheckB(newFormula, calculation);
+        bool canRun = true;
+        if (!SceneManager.GetActiveScene().name.Equals("TutorialIntro") || (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted))
+        {
+            canRun = false;
+        }
+        if (canRun)
+        {
+            if (inputText != GameObject.Find("Formule"))
+            {
+                inputText = GameObject.Find("Formule");
+            }
+            string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula                                                       
+            // formula parsing for reading
+            if (!hitTheirGoal.Contains(activeLine))
+            { // check if the line isn't already completed
+                if (!string.IsNullOrEmpty(newFormula))
+                { // check if the string is empty
+                    if (CanParseFormula(newFormula))
+                    { // check if the string if parsable and their arent any weird characters
+                        string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
+                        formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
+                        formulas.Add(activeLine, GetStringFromArray(calculation));
+                        HandleAngle(calculation);
+                        if (hasStretched)
+                        {
+                            CheckB(newFormula, calculation);
+                        }
                     }
-                } else {
-                    //Debug.Log("Invalid formula!");
+                    else
+                    {
+                        //Debug.Log("Invalid formula!");
+                    }
                 }
             }
         }
@@ -166,7 +184,7 @@ public class ActiveLineChecker : MonoBehaviour {
         return sb.ToString().Trim();
     }
 
-    private Vector2 GetTargetPosition() {
+    public static Vector2 GetTargetPosition() {
         Vector2 targetPosition;
         switch (activeLine.name) { // target position of the is different for each line
             case "LineDrawer": // so that is handled here, for every line (switched by name) the target position is changed accordingly
