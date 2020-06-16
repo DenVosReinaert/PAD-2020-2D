@@ -37,7 +37,6 @@ public class Interscene : MonoBehaviour {
         if (Time.time - time >= 10) {
             //checkedDB = false;
         }
-        Debug.Log(money);
     }
 
     public void Login() {

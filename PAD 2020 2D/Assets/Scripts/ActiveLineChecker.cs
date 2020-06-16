@@ -49,35 +49,26 @@ public class ActiveLineChecker : MonoBehaviour {
         CheckInput();
         HandleStretching();
         bool canRun = true;
-        if (!SceneManager.GetActiveScene().name.Equals("TutorialIntro") || (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted))
-        {
+        if (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted) {
             canRun = false;
         }
-        if (canRun)
-        {
-            if (inputText != GameObject.Find("Formule"))
-            {
+        if (canRun) {
+            if (inputText != GameObject.Find("Formule")) {
                 inputText = GameObject.Find("Formule");
             }
             string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula                                                       
             // formula parsing for reading
-            if (!hitTheirGoal.Contains(activeLine))
-            { // check if the line isn't already completed
-                if (!string.IsNullOrEmpty(newFormula))
-                { // check if the string is empty
-                    if (CanParseFormula(newFormula))
-                    { // check if the string if parsable and their arent any weird characters
+            if (!hitTheirGoal.Contains(activeLine)) { // check if the line isn't already completed
+                if (!string.IsNullOrEmpty(newFormula)) { // check if the string is empty
+                    if (CanParseFormula(newFormula)) { // check if the string if parsable and their arent any weird characters
                         string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
                         formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
                         formulas.Add(activeLine, GetStringFromArray(calculation));
                         HandleAngle(calculation);
-                        if (hasStretched)
-                        {
+                        if (hasStretched) {
                             CheckB(newFormula, calculation);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         //Debug.Log("Invalid formula!");
                     }
                 }
@@ -101,12 +92,12 @@ public class ActiveLineChecker : MonoBehaviour {
 
     private void CheckB(string newFormula, string[] calculation) {
         bool answeredCorrect = false; // hasnt checked yet
+        float differenceX = activeLine.transform.position.x * -1; // difference between position and 0 x, when x is zero the line crosses the y-axis
+        float yPos = coefficient * differenceX;  // multiply difference to get the the difference
+        int yPosRounded = (int) Mathf.Round(yPos);
+        int roundedY = (int) activeLine.transform.position.y + (int) yPosRounded;
         if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) { // check if the B isn't empty and parsable
             float beginPoint = ParseNumber(calculation[2]); // parse the number
-            float differenceX = activeLine.transform.position.x * -1; // difference between position and 0 x, when x is zero the line crosses the y-axis
-            float yPos = coefficient * differenceX;  // multiply difference to get the the difference
-            int yPosRounded = (int) Mathf.Round(yPos);
-            int roundedY = (int) activeLine.transform.position.y + (int) yPosRounded;
             if (beginPoint == roundedY && calculation[1].Equals("+")) { // if parsed number && the rounded y are the same and the math operator is '+'
                 answeredCorrect = true; // than player answered correctly
             } else {
@@ -123,40 +114,40 @@ public class ActiveLineChecker : MonoBehaviour {
                     subtractedLife = true;
                 }
             }
+        } else {
+            if (roundedY == 0) {
+                answeredCorrect = true;
+            }
         }
         InputField text = GameObject.Find("FormulaField").GetComponent<InputField>(); // get the text
-        if (newFormula.EndsWith("x")) {
-            answeredCorrect = true;
-        } else {
-            int index = 2;
-            int secondIndex = 3;
-            bool longB = false;
-            if (calculation[2].Length == 1) {
-                index = text.text.IndexOf(calculation[2], 2); // get the index number of where the B is
-            } else if (calculation[2].Length == 2) {
-                char[] numbers = calculation[2].ToCharArray();
-                index = text.text.IndexOf(numbers[0], 2); // get the index number of where the B is
-                secondIndex = text.text.IndexOf(numbers[1], 2);
-                longB = true;
+        int index = 2;
+        int secondIndex = 3;
+        bool longB = false;
+        if (calculation[2].Length == 1) {
+            index = text.text.IndexOf(calculation[2], 2); // get the index number of where the B is
+        } else if (calculation[2].Length == 2) {
+            char[] numbers = calculation[2].ToCharArray();
+            index = text.text.IndexOf(numbers[0], 2); // get the index number of where the B is
+            secondIndex = text.text.IndexOf(numbers[1], 2);
+            longB = true;
+        }
+        if (index > 2) {
+            string newB;
+            if (longB) {
+                newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>"
+                    : "<color=red>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>";
+            } else {
+                newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + "</color>" : "<color=red>" + text.text[index].ToString() + "</color>";
             }
-            if (index > 2) {
-                string newB;
-                if (longB) {
-                    newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>" 
-                        : "<color=red>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>";
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < calculation.Length; i++) {
+                if (calculation[i].Equals(calculation[2])) {
+                    sb.Append(newB).Append(" ");
                 } else {
-                   newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + "</color>" : "<color=red>" + text.text[index].ToString() + "</color>";
+                    sb.Append(calculation[i]).Append(" ");
                 }
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < calculation.Length; i++) {
-                    if (calculation[i].Equals(calculation[2])) {
-                        sb.Append(newB).Append(" ");
-                    } else {
-                        sb.Append(calculation[i]).Append(" ");
-                    }
-                }
-                text.text = sb.ToString().Trim();
             }
+            text.text = sb.ToString().Trim();
         }
         if (answeredCorrect) { // if answered correct, update in the list
             if (hasBCorrect.ContainsKey(activeLine)) {
@@ -444,7 +435,7 @@ public class ActiveLineChecker : MonoBehaviour {
             } else if (formula.Contains("* ")) {
                 formula.Replace("* ", "");
             } else {
-                formula.Replace("*", ""); 
+                formula.Replace("*", "");
             }
         }
         if (formula.Contains("y=")) { // remove 'y=' from the formula

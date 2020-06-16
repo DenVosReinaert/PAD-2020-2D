@@ -22,12 +22,15 @@ public class LeaderboardHandler : MonoBehaviour {
     }
 
     public void Start() {
-        FillBoard();
+        if (SceneManager.GetActiveScene().name.Equals("Leaderboard")) {
+            FillBoard();
+        }
     }
 
     public void Update() {
-        FillBoard();
-        Debug.Log(highScores.Count);
+        if (SceneManager.GetActiveScene().name.Equals("Leaderboard")) {
+            FillBoard();
+        }
     }
 
     private void FillBoard() {

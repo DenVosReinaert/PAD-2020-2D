@@ -23,13 +23,10 @@ public class DrawLine : MonoBehaviour
     void Update() {
         CheckPosition();
         bool canRun = true;
-        if (!SceneManager.GetActiveScene().name.Equals("TutorialIntro") || (SceneManager.GetActiveScene().name.Equals("TutorialIntro") &&
-            !TutorialHelper.levelHasStarted))
-        {
+        if (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted) {
             canRun = false;
         }
-        if (canRun)
-        {
+        if (canRun) {
             GameObject.Find("Y Positie").GetComponent<InputField>().text = ActiveLineChecker.activeLine.transform.position.y + "";
         }
     }
