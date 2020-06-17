@@ -26,8 +26,8 @@ public class ActiveLineChecker : MonoBehaviour {
 
     // constants
     private const int _MaxScale = 22; // maximum length of the line when stretching
-    private const float _ScaleIncrement = 0.1f; // how much the line increasing when stretching
-    private const float _ScaleDecrement = 0.2f; // how much the line decreases when shrinking
+    private const float _ScaleIncrement = 0.2f; // how much the line increasing when stretching
+    private const float _ScaleDecrement = 0.4f; // how much the line decreases when shrinking
 
     void Awake() {
         lines = new Transform[transform.childCount]; // size of the array is the amount of children
@@ -213,8 +213,8 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     private void HandleStretching() {
+        Vector3 newScale = activeLine.transform.localScale;
         if (hasStretched && activeLine.transform.localScale.y < _MaxScale) { // line hasn't reached its max yet, so it must grow
-            Vector3 newScale = activeLine.transform.localScale;
             if (!hitTheirGoal.Contains(activeLine)) {
                 newScale.y += _ScaleIncrement;
             }
@@ -226,12 +226,12 @@ public class ActiveLineChecker : MonoBehaviour {
         }
 
         if (activeLine.transform.localScale.y > 1 && !hasStretched) { // the actual stretching part is done here
-            Vector3 newScale = activeLine.transform.localScale; // this is to avoid creating a new empty vector3
             if (!hitTheirGoal.Contains(activeLine)) {
                 newScale.y -= _ScaleDecrement;
             }
             activeLine.transform.localScale = newScale;
         }
+        Debug.Log(newScale);
     }
 
     private void CheckHit() {

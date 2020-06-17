@@ -129,6 +129,11 @@ public class Waypoints : MonoBehaviour {
         }
         rando.x = (int) Mathf.Round(rando.x);
         rando.y = (int) Mathf.Round(rando.y);
+        if (rando.x >= 8) {
+            rando.x = 7;
+        } else if (rando.x <= -8) {
+            rando.x = -7;
+        }
         return rando;
     }
 
@@ -208,6 +213,11 @@ public class Waypoints : MonoBehaviour {
         }
         rando.x = (int) Mathf.Round(rando.x);
         rando.y = (int) Mathf.Round(rando.y);
+        if (rando.x >= 8) {
+            rando.x = 7;
+        } else if (rando.x <= -8) {
+            rando.x = -7;
+        }
         return rando;
     }
 
@@ -287,6 +297,11 @@ public class Waypoints : MonoBehaviour {
         }
         rando.x = (int) Mathf.Round(rando.x);
         rando.y = (int) Mathf.Round(rando.y);
+        if (rando.x >= 8) {
+            rando.x = 7;
+        } else if (rando.x <= -8) {
+            rando.x = -7;
+        }
         return rando;
     }
 }
