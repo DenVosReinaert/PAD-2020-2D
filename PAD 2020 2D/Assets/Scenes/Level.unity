@@ -4767,8 +4767,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -129, y: 408}
-  m_SizeDelta: {x: 106, y: 30}
+  m_AnchoredPosition: {x: -110, y: 410}
+  m_SizeDelta: {x: 110, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &297165932
 MonoBehaviour:
@@ -5455,7 +5455,7 @@ SpriteRenderer:
   m_Size: {x: 8, y: 8.85}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &502928454
@@ -6038,7 +6038,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21.3, y: -381.4}
+  m_AnchoredPosition: {x: 0, y: -400}
   m_SizeDelta: {x: 86, y: 26.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &700707681
@@ -7312,8 +7312,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 22, y: 408}
-  m_SizeDelta: {x: 50, y: 30}
+  m_AnchoredPosition: {x: 30, y: 410}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.50000006}
 --- !u!114 &1263348441
 MonoBehaviour:
@@ -7377,7 +7377,7 @@ MonoBehaviour:
   m_Text: 
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
-  m_ReadOnly: 0
+  m_ReadOnly: 1
 --- !u!114 &1263348442
 MonoBehaviour:
   m_ObjectHideFlags: 0

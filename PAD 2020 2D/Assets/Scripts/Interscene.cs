@@ -52,6 +52,9 @@ public class Interscene : MonoBehaviour {
     }
 
     private void CheckDB(string userName) {
+        if (string.IsNullOrEmpty(userName)) {
+            return;
+        }
         if (hasData) {
             RetrieveData(userName);
         } else {
