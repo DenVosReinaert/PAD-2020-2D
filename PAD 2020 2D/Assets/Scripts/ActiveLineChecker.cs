@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -26,8 +27,8 @@ public class ActiveLineChecker : MonoBehaviour {
 
     // constants
     private const int _MaxScale = 22; // maximum length of the line when stretching
-    private const float _ScaleIncrement = 0.1f; // how much the line increasing when stretching
-    private const float _ScaleDecrement = 0.2f; // how much the line decreases when shrinking
+    private const float _ScaleIncrement = 0.2f; // how much the line increasing when stretching
+    private const float _ScaleDecrement = 0.4f; // how much the line decreases when shrinking
 
     void Awake() {
         lines = new Transform[transform.childCount]; // size of the array is the amount of children
@@ -48,20 +49,31 @@ public class ActiveLineChecker : MonoBehaviour {
         CheckHit();
         CheckInput();
         HandleStretching();
-        string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula
-        // formula parsing for reading
-        if (!hitTheirGoal.Contains(activeLine)) { // check if the line isn't already completed
-            if (!string.IsNullOrEmpty(newFormula)) { // check if the string is empty
-                if (CanParseFormula(newFormula)) { // check if the string if parsable and their arent any weird characters
-                    string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
-                    formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
-                    formulas.Add(activeLine, GetStringFromArray(calculation));
-                    HandleAngle(calculation);
-                    if (hasStretched) {
-                        CheckB(newFormula, calculation);
+        bool canRun = true;
+        if (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted) {
+            canRun = false;
+        }
+        if (canRun) {
+            if (inputText != GameObject.Find("Formule")) {
+                inputText = GameObject.Find("Formule");
+            }
+            string newFormula = inputText.GetComponent<Text>().text; // get the input text and store it in formula                                                       
+            // formula parsing for reading
+            if (!hitTheirGoal.Contains(activeLine)) { // check if the line isn't already completed
+                if (!string.IsNullOrEmpty(newFormula)) { // check if the string is empty
+                    if (CanParseFormula(newFormula)) { // check if the string if parsable and their arent any weird characters
+                        string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
+                        formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
+                        formulas.Add(activeLine, GetStringFromArray(calculation));
+                        HandleAngle(calculation);
+                        if (hasStretched) {
+                            CheckB(newFormula, calculation);
+                        }
+                    } else {
+                        //Debug.Log("Invalid formula!");
                     }
                 } else {
-                    //Debug.Log("Invalid formula!");
+                    activeLine.transform.rotation = Quaternion.Euler(0, 0, 90f);
                 }
             }
         }
@@ -83,12 +95,12 @@ public class ActiveLineChecker : MonoBehaviour {
 
     private void CheckB(string newFormula, string[] calculation) {
         bool answeredCorrect = false; // hasnt checked yet
+        float differenceX = activeLine.transform.position.x * -1; // difference between position and 0 x, when x is zero the line crosses the y-axis
+        float yPos = coefficient * differenceX;  // multiply difference to get the the difference
+        int yPosRounded = (int) Mathf.Round(yPos);
+        int roundedY = (int) activeLine.transform.position.y + (int) yPosRounded;
         if (!string.IsNullOrEmpty(calculation[2]) && CanParse(calculation[2])) { // check if the B isn't empty and parsable
             float beginPoint = ParseNumber(calculation[2]); // parse the number
-            float differenceX = activeLine.transform.position.x * -1; // difference between position and 0 x, when x is zero the line crosses the y-axis
-            float yPos = coefficient * differenceX;  // multiply difference to get the the difference
-            int yPosRounded = (int) Mathf.Round(yPos);
-            int roundedY = (int) activeLine.transform.position.y + (int) yPosRounded;
             if (beginPoint == roundedY && calculation[1].Equals("+")) { // if parsed number && the rounded y are the same and the math operator is '+'
                 answeredCorrect = true; // than player answered correctly
             } else {
@@ -105,29 +117,30 @@ public class ActiveLineChecker : MonoBehaviour {
                     subtractedLife = true;
                 }
             }
-        }
-        InputField text = GameObject.Find("FormulaField").GetComponent<InputField>(); // get the text
-        if (newFormula.EndsWith("x")) {
-            answeredCorrect = true;
         } else {
-            int index = 2;
-            int secondIndex = 3;
-            bool longB = false;
+            if (roundedY == 0) {
+                answeredCorrect = true;
+            }
+        }
+        int index = 2;
+        int secondIndex = 3;
+        bool longB = false;
+        if (newFormula.Length > 1) {
             if (calculation[2].Length == 1) {
-                index = text.text.IndexOf(calculation[2], 2); // get the index number of where the B is
+                index = newFormula.IndexOf(calculation[2], 2); // get the index number of where the B is
             } else if (calculation[2].Length == 2) {
                 char[] numbers = calculation[2].ToCharArray();
-                index = text.text.IndexOf(numbers[0], 2); // get the index number of where the B is
-                secondIndex = text.text.IndexOf(numbers[1], 2);
+                index = newFormula.IndexOf(numbers[0], 2); // get the index number of where the B is
+                secondIndex = newFormula.IndexOf(numbers[1], 2);
                 longB = true;
             }
             if (index > 2) {
                 string newB;
                 if (longB) {
-                    newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>" 
-                        : "<color=red>" + text.text[index].ToString() + text.text[secondIndex].ToString() + "</color>";
+                    newB = answeredCorrect ? "<color=green>" + newFormula[index].ToString() + newFormula[secondIndex].ToString() + "</color>"
+                        : "<color=red>" + newFormula[index].ToString() + newFormula[secondIndex].ToString() + "</color>";
                 } else {
-                   newB = answeredCorrect ? "<color=green>" + text.text[index].ToString() + "</color>" : "<color=red>" + text.text[index].ToString() + "</color>";
+                    newB = answeredCorrect ? "<color=green>" + newFormula[index].ToString() + "</color>" : "<color=red>" + newFormula[index].ToString() + "</color>";
                 }
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < calculation.Length; i++) {
@@ -137,7 +150,12 @@ public class ActiveLineChecker : MonoBehaviour {
                         sb.Append(calculation[i]).Append(" ");
                     }
                 }
-                text.text = sb.ToString().Trim();
+                GameObject.Find("FormulaField").GetComponent<InputField>().text = sb.ToString().Trim();
+            }
+        } else {
+            if (newFormula.Length == 1) {
+                string temp = answeredCorrect ? "<color=green>" + newFormula + "</color>" : "<color=red>" + newFormula + "</color>";
+                GameObject.Find("FormulaField").GetComponent<InputField>().text = temp;
             }
         }
         if (answeredCorrect) { // if answered correct, update in the list
@@ -150,10 +168,12 @@ public class ActiveLineChecker : MonoBehaviour {
 
     private float GetSlopeFromFormula(string[] formula) {
         float slope = 0;
-        if (formula[0].EndsWith("x")) { // this part retrieves the coefficient (slope) from the formula
+        if (formula[0].EndsWith("x") && !formula[0].Equals("x")) { // this part retrieves the coefficient (slope) from the formula
             slope = ParseNumber(formula[0].Substring(0, formula[0].Length - 1));
         } else if (!formula[0].StartsWith("-") && !formula[0].StartsWith("+")) {
             slope = ParseNumber(formula[0]);
+        } else if (formula[0].Equals("x")) {
+            slope = 1;
         }
         return slope;
     }
@@ -166,7 +186,7 @@ public class ActiveLineChecker : MonoBehaviour {
         return sb.ToString().Trim();
     }
 
-    private Vector2 GetTargetPosition() {
+    public static Vector2 GetTargetPosition() {
         Vector2 targetPosition;
         switch (activeLine.name) { // target position of the is different for each line
             case "LineDrawer": // so that is handled here, for every line (switched by name) the target position is changed accordingly
@@ -190,11 +210,7 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     private void CheckInput() {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && hitTheirGoal.Contains(activeLine)) { // go to next line to edit when enter key is pressed
-            NextLine();
-        } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
-            PreviousLine();
-        } else if (Input.GetKeyDown(KeyCode.Return) && !hasStretched && activeLine.transform.localScale.y <= 1) { // this is for when the player presses enter so that the pipe will stretched
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !hasStretched && activeLine.transform.localScale.y <= 1) { // this is for when the player presses enter so that the pipe will stretched
             hasStretched = true;
             if (stretched.ContainsKey(activeLine)) {
                 stretched.Remove(activeLine);
@@ -204,8 +220,8 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     private void HandleStretching() {
+        Vector3 newScale = activeLine.transform.localScale;
         if (hasStretched && activeLine.transform.localScale.y < _MaxScale) { // line hasn't reached its max yet, so it must grow
-            Vector3 newScale = activeLine.transform.localScale;
             if (!hitTheirGoal.Contains(activeLine)) {
                 newScale.y += _ScaleIncrement;
             }
@@ -217,10 +233,13 @@ public class ActiveLineChecker : MonoBehaviour {
         }
 
         if (activeLine.transform.localScale.y > 1 && !hasStretched) { // the actual stretching part is done here
-            Vector3 newScale = activeLine.transform.localScale; // this is to avoid creating a new empty vector3
             if (!hitTheirGoal.Contains(activeLine)) {
                 newScale.y -= _ScaleDecrement;
             }
+            activeLine.transform.localScale = newScale;
+        }
+        if (activeLine.transform.localScale.y < 1) {
+            newScale.y = 1;
             activeLine.transform.localScale = newScale;
         }
     }
@@ -231,6 +250,7 @@ public class ActiveLineChecker : MonoBehaviour {
                 if (formulas.TryGetValue(activeLine, out string formula)) {
                     GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
                     SoundManagerScript.PlaySound("Right");
+                    NextLine();
                 }
             } else { // if not, the line isnt complete so remove it from the 'hit their goal' list.
                 hitTheirGoal.Remove(activeLine);
@@ -346,32 +366,6 @@ public class ActiveLineChecker : MonoBehaviour {
         }
     }
 
-    void PreviousLine() { // method that handles going back to previous line
-        GameObject oldLine = activeLine.gameObject; // update line
-        if (activeLine == lines[1].gameObject) {
-            if (lines[0] != null) {
-                activeLine = lines[0].gameObject;
-            }
-        } else if (activeLine == lines[2].gameObject) {
-            if (lines[1] != null) {
-                activeLine = lines[1].gameObject;
-            }
-        } else if (activeLine == lines[3].gameObject) {
-            if (lines[2] != null) {
-                activeLine = lines[2].gameObject;
-            }
-        }
-        if (stretched.TryGetValue(activeLine, out bool value)) {
-            hasStretched = value;
-        } else {
-            hasStretched = false; // update values
-        }
-        ClearFields(oldLine, activeLine.gameObject); // clear fields
-        if (hitTheirGoal.Contains(activeLine)) { // make the text go green when it hits their goal
-            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
-        }
-    }
-
     private void ClearFields(GameObject oldLine, GameObject newLine) {
         string input = inputText.GetComponent<Text>().text; // get current text
         if (formulas.ContainsKey(oldLine) && !string.IsNullOrEmpty(input)) { // if its empty
@@ -394,7 +388,7 @@ public class ActiveLineChecker : MonoBehaviour {
         }
         if (formula.Length == 1) { // if there is only one character it shouldnt be anything else than a number or it isnt parsable
             char[] number = formula.ToCharArray();
-            if (number[0] < '0' || number[0] > '9') {
+            if ((number[0] < '0' || number[0] > '9') && number[0] != 'x' && number[0] != 'X') {
                 return false;
             }
         }
@@ -420,26 +414,29 @@ public class ActiveLineChecker : MonoBehaviour {
         string[] content; // get the contents in the form or -1x, -, 3 when formula is -1x - 3
         if (formula.Contains("*")) { // form: -1*x-3 or -1 * x - 3 or -1*x - 3
             if (formula.Contains(" * ")) { // remove multiply signs
-                formula.Replace(" * ", "");
+                formula = formula.Replace(" * ", "");
             } else if (formula.Contains("* ")) {
-                formula.Replace(" *", "");
+                formula = formula.Replace(" *", "");
             } else if (formula.Contains("* ")) {
-                formula.Replace("* ", "");
+                formula = formula.Replace("* ", "");
             } else {
-                formula.Replace("*", ""); 
+                formula = formula.Replace("*", "");
             }
         }
         if (formula.Contains("y=")) { // remove 'y=' from the formula
-            formula.Replace("y=", "");
+            formula = formula.Replace("y=", "");
         } else if (formula.Contains("y =")) {
-            formula.Replace("y =", "");
+            formula = formula.Replace("y =", "");
         }
         if (formula.Contains(" ")) { // with this form in mind: -1x - 3
             content = formula.Split(' ');
             if (content.Length != 3) {
                 if (content.Length == 2) {
                     string firstValue = content[0];
-                    if (content[0].Contains("x") && !content[0].EndsWith("x")) { // if the first bit has x in it, but doesnt end with it
+                    if (firstValue.Equals("-x") || firstValue.Equals("x")) {
+                        firstValue = firstValue.Replace("x", "1x");
+                    }
+                    if (firstValue.Contains("x") && !firstValue.EndsWith("x")) { // if the first bit has x in it, but doesnt end with it
                         string secondValue = content[1]; // make it end with x
                         int xIndex = content[0].IndexOf('x');
                         string newValue = content[0].Substring(xIndex);
@@ -465,23 +462,37 @@ public class ActiveLineChecker : MonoBehaviour {
                 } else {
                     Debug.Log("Unsupported formula format.");
                 }
+            } else {
+                string value = content[0];
+                if (value.Equals("-x") || value.Equals("x")) {
+                    value = value.Replace("x", "1x");
+                    content[0] = value;
+                }
             }
         } else { // form: -1x-3
             if (formula.EndsWith("x")) {
-                formula = formula + " + 0";
+                formula += " + 0";
             }
-            StringBuilder sb = new StringBuilder();
-            char[] formule = formula.ToCharArray(); // if there's no spaces at all, make the spaces yourself
-            for (int i = 0; i < formule.Length; i++) {
-                if (formule[i] == 'x') { // space if current char is x
-                    sb.Append(formule[i]).Append(" ");
-                } else if ((formule[i] == '-' || formule[i] == '+') && i > 0) { // if math operator and the position is greater than 0, space
-                    sb.Append(formule[i]).Append(" ");
-                } else {
-                    sb.Append(formule[i]); // normally, no space
+            if (formula.StartsWith("x") || formula.StartsWith("-x")) {
+                formula = formula.Replace("x", "1x");
+            }
+            if (formula.Equals("x")) {
+                string temp = "1x + 0";
+                content = temp.Split(' ');
+            } else {
+                StringBuilder sb = new StringBuilder();
+                char[] formule = formula.ToCharArray(); // if there's no spaces at all, make the spaces yourself
+                for (int i = 0; i < formule.Length; i++) {
+                    if (formule[i] == 'x') { // space if current char is x
+                        sb.Append(formule[i]).Append(" ");
+                    } else if ((formule[i] == '-' || formule[i] == '+') && i > 0) { // if math operator and the position is greater than 0, space
+                        sb.Append(formule[i]).Append(" ");
+                    } else {
+                        sb.Append(formule[i]); // normally, no space
+                    }
                 }
+                content = sb.ToString().Trim().Split(' '); // return the string but trim it so the last space goes away and split it at the spaces
             }
-            content = sb.ToString().Trim().Split(' '); // return the string but trim it so the last space goes away and split it at the spaces
         }
         return content;
     }
@@ -527,7 +538,18 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     public double GetAngle(string[] formula, double differenceOnYAxis) { // get the angle according to formula
-        string toParse = formula[0].Replace("x", "");
+        string toParse;
+        if (formula[0].Equals("x") || formula[0].Equals("-x")) {
+            toParse = formula[0].Replace("x", "1x");
+            toParse = toParse.Replace("x", "");
+        } else {
+            if (formula[0].Contains("x")) {
+                toParse = formula[0].Replace("x", "");
+            } else {
+                toParse = "0";
+                Debug.Log("No x value to get an angle.");
+            }
+        }
         double coefficient = 0d;
         if (CanParse(toParse)) { // parse angle
             coefficient = double.Parse(formula[0].Replace("x", ""));
@@ -540,7 +562,6 @@ public class ActiveLineChecker : MonoBehaviour {
         double hoek = differenceOnYAxis / xDistance; // tan(hoek a) = overstaande / aanliggende
         double angleInRadians = Mathf.Atan((float) hoek); // hoek is returned in radians, a = tan^-1(overstaande/aanliggende)
         double angle = angleInRadians * (180d / Math.PI); // convert radians to degrees
-        double test = Math.Tan(angle);
         return angle;
     }
 

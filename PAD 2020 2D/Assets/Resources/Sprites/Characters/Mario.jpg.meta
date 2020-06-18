@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:PAD 2020 2D/Assets/Resources/Sprites/Characters/Mario.jpg.meta
 guid: 98a6a3a384cef1649a0b505a408c430e
+=======
+guid: 1e186715eb78a15458ab41b36f4c7462
+>>>>>>> Development:PAD 2020 2D/Assets/Resources/Sprites/Characters/Bowser.png.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}

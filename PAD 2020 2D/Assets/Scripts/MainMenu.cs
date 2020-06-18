@@ -10,6 +10,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Level"); // When the button Play is pushed the scene loads to Level
     }
 
+    public void Tutorial()
+    {
+        SceneManager.LoadScene("Conversation"); // Go to the conversation before tutorial starts
+    }
+
     public void Shop()
     {
         SceneManager.LoadScene("Shop"); // When the button Shop is pushed the scene loads to Shop

@@ -37,7 +37,6 @@ public class Interscene : MonoBehaviour {
         if (Time.time - time >= 10) {
             //checkedDB = false;
         }
-        Debug.Log(money);
     }
 
     public void Login() {
@@ -53,6 +52,9 @@ public class Interscene : MonoBehaviour {
     }
 
     private void CheckDB(string userName) {
+        if (string.IsNullOrEmpty(userName)) {
+            return;
+        }
         if (hasData) {
             RetrieveData(userName);
         } else {
@@ -63,6 +65,10 @@ public class Interscene : MonoBehaviour {
     }
 
     public void PutData(string userName, int money) {
+        if (string.IsNullOrEmpty(userName)) {
+            Debug.Log("User name was empty, not storing to database.");
+            return;
+        }
         StartCoroutine(Score(userName, money));
     }
 
