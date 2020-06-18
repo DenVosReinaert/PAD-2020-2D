@@ -16,6 +16,8 @@ public class Waypoints : MonoBehaviour {
     private const int _Positie3MinX = 4;
     private const int _YMin = -5; // minimum of y
     private const int _YMax = 5; // maximum of y
+    private const int _MinDistance = 1;
+    private const int _MaxDistance = 3;
 
     void Awake()
     {
@@ -32,6 +34,7 @@ public class Waypoints : MonoBehaviour {
                 GameObject.Find("WP").transform.position = RandomPosition1();
                 GameObject.Find("WP (1)").transform.position = RandomPosition2();
                 GameObject.Find("WP (2)").transform.position = RandomPosition3();
+                PositionCorrection();
             }
             else
             { // else, get the position from Interscene script
@@ -50,6 +53,21 @@ public class Waypoints : MonoBehaviour {
         for (int i = 0; i < Interscene.instance.waypoints.Length; i++)
         { // store positions in interscene
             Interscene.instance.waypoints[i] = waypoints[i].position;
+        }
+    }
+
+    private void PositionCorrection() {
+        Transform wp = waypoints[0];
+        Transform wp1 = waypoints[1];
+        Transform wp2 = waypoints[2];
+        if (wp1.position.y == wp.position.y) {
+            Vector2 position = wp1.position;
+            position.y += Random.Range(_MinDistance, _MaxDistance);
+            wp1.position = position;
+        } else if (wp2.position.y == wp1.position.y) {
+            Vector2 position = wp2.position;
+            position.y += Random.Range(_MinDistance, _MaxDistance);
+            wp2.position = position;
         }
     }
 
