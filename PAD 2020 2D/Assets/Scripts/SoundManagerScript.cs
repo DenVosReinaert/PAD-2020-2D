@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManagerScript : MonoBehaviour
 {
