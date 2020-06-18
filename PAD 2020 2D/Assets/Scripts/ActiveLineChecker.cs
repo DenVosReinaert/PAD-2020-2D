@@ -234,7 +234,7 @@ public class ActiveLineChecker : MonoBehaviour {
         Debug.Log(newScale);
     }
 
-    private void CheckHit() {
+    public void CheckHit() {
         if (hitTheirGoal.Contains(activeLine) && hasBCorrect.TryGetValue(activeLine, out bool isBCorrect)) { // if current pipe has hit their goal, and their B is correct than make the text uneditable.
             if (isBCorrect) {
                 if (formulas.TryGetValue(activeLine, out string formula)) {

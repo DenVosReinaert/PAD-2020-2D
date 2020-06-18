@@ -53,3 +53,6 @@ TagManager:
   - name: lines
     uniqueID: 935568835
     locked: 0
+  - name: Pause
+    uniqueID: 2929220013
+    locked: 0
