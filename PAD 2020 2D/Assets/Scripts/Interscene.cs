@@ -65,6 +65,10 @@ public class Interscene : MonoBehaviour {
     }
 
     public void PutData(string userName, int money) {
+        if (string.IsNullOrEmpty(userName)) {
+            Debug.Log("User name was empty, not storing to database.");
+            return;
+        }
         StartCoroutine(Score(userName, money));
     }
 

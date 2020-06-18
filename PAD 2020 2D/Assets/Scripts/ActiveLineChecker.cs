@@ -65,7 +65,6 @@ public class ActiveLineChecker : MonoBehaviour {
                         string[] calculation = ParseFormula(newFormula); // parse the formula in the form of 1x + 3
                         formulas.Remove(activeLine); // remove line from formula's because the formula will be updated
                         formulas.Add(activeLine, GetStringFromArray(calculation));
-                        Debug.Log(GetStringFromArray(calculation) + " " + calculation.Length);
                         HandleAngle(calculation);
                         if (hasStretched) {
                             CheckB(newFormula, calculation);
@@ -211,11 +210,7 @@ public class ActiveLineChecker : MonoBehaviour {
     }
 
     private void CheckInput() {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && hitTheirGoal.Contains(activeLine)) { // go to next line to edit when enter key is pressed
-            NextLine();
-        } else if (Input.GetKeyDown(KeyCode.LeftArrow)) { // go to previous line to edit when backspace is pressed
-            PreviousLine();
-        } else if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !hasStretched && activeLine.transform.localScale.y <= 1) { // this is for when the player presses enter so that the pipe will stretched
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !hasStretched && activeLine.transform.localScale.y <= 1) { // this is for when the player presses enter so that the pipe will stretched
             hasStretched = true;
             if (stretched.ContainsKey(activeLine)) {
                 stretched.Remove(activeLine);
@@ -255,6 +250,7 @@ public class ActiveLineChecker : MonoBehaviour {
                 if (formulas.TryGetValue(activeLine, out string formula)) {
                     GameObject.Find("FormulaField").GetComponent<InputField>().text = formula;
                     SoundManagerScript.PlaySound("Right");
+                    NextLine();
                 }
             } else { // if not, the line isnt complete so remove it from the 'hit their goal' list.
                 hitTheirGoal.Remove(activeLine);
@@ -367,32 +363,6 @@ public class ActiveLineChecker : MonoBehaviour {
             } else if (GameObject.Find("Formule").GetComponent<Text>().text.Contains("</color>")) {
                 GameObject.Find("Formule").GetComponent<Text>().text.Replace("</color>", "");
             }
-        }
-    }
-
-    void PreviousLine() { // method that handles going back to previous line
-        GameObject oldLine = activeLine.gameObject; // update line
-        if (activeLine == lines[1].gameObject) {
-            if (lines[0] != null) {
-                activeLine = lines[0].gameObject;
-            }
-        } else if (activeLine == lines[2].gameObject) {
-            if (lines[1] != null) {
-                activeLine = lines[1].gameObject;
-            }
-        } else if (activeLine == lines[3].gameObject) {
-            if (lines[2] != null) {
-                activeLine = lines[2].gameObject;
-            }
-        }
-        if (stretched.TryGetValue(activeLine, out bool value)) {
-            hasStretched = value;
-        } else {
-            hasStretched = false; // update values
-        }
-        ClearFields(oldLine, activeLine.gameObject); // clear fields
-        if (hitTheirGoal.Contains(activeLine)) { // make the text go green when it hits their goal
-            GameObject.Find("Formule").GetComponent<Text>().color = new Color(0, 1, 0);
         }
     }
 
