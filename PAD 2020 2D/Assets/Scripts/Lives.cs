@@ -15,20 +15,34 @@ public class Lives : MonoBehaviour {
     private static float time;
     private static bool canLoseLife;
     public static int life = 5;
+    string sceneName;
+
 
     private void Awake() { 
         hearts = new GameObject[transform.childCount]; // array size = hearts/lifes
         for (int i = 0; i < hearts.Length; i++) { // get data from childs
             hearts[i] = transform.GetChild(i).gameObject;
-        }
+        }       
     }
 
+    private void Start()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        string sceneName = currentScene.name;
+    }
 
     void Update() { // if life = -1 one heart disapears
         if (life < 1) {
-            hearts[0].SetActive(false);
-            SceneManager.LoadScene("LossScreen"); // at 0 lifes lossscreen 
-            ResetLives(); // resets lifes and displayed hearts back to 5 for retry or next game
+            if (sceneName == "Level")
+            {
+                hearts[0].SetActive(false);
+                SceneManager.LoadScene("LossScreen"); // at 0 lifes lossscreen 
+                ResetLives(); // resets lifes and displayed hearts back to 5 for retry or next game
+            }
+            if (sceneName == "TutorialIntro")
+            {
+                canLoseLife = false;
+            }
         } else if (life < 2) {
             hearts[1].SetActive(false);
         } else if (life < 3) {
@@ -45,7 +59,7 @@ public class Lives : MonoBehaviour {
 
     public static void ResetLives() {
         life = 5; // restets lifes back to 5
-        for (int i = 0; i < hearts.Length; i++) { // restets displayed hearts to 5
+        for (int i = 0; i < hearts.Length; i++) { // resets displayed hearts to 5
             hearts[i].SetActive(true);
         }
     }
