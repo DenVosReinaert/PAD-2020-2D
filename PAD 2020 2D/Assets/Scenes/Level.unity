@@ -8123,7 +8123,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hoofdmenu
+  m_Text: Main menu
 --- !u!222 &1248092936
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10128,7 +10128,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -10322,7 +10322,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hervatten
+  m_Text: Resume
 --- !u!222 &2027223343
 CanvasRenderer:
   m_ObjectHideFlags: 0
