@@ -711,6 +711,10 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12116}
     - Class: 114
+      Script: {instanceID: 12334}
+    - Class: 114
+      Script: {instanceID: 12376}
+    - Class: 114
       Script: {instanceID: 12462}
     - Class: 114
       Script: {instanceID: 12546}
@@ -720,6 +724,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 12826}
     - Class: 114
       Script: {instanceID: 12940}
+    - Class: 114
+      Script: {instanceID: 13140}
+    - Class: 114
+      Script: {instanceID: 13146}
     - Class: 114
       Script: {instanceID: 13456}
     - Class: 114
@@ -788,6 +796,12 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 224
       Script: {instanceID: 0}
+    - Class: 241
+      Script: {instanceID: 0}
+    - Class: 243
+      Script: {instanceID: 0}
+    - Class: 245
+      Script: {instanceID: 0}
     - Class: 156049354
       Script: {instanceID: 0}
     - Class: 483693784
@@ -806,8 +820,6 @@ ScriptsOnlyBuild:
     - Class: 28
       Script: {instanceID: 0}
     - Class: 48
-      Script: {instanceID: 0}
-    - Class: 72
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
@@ -2357,5 +2369,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Shop.unity
   - Assets/Scenes/LossScreen.unity
   - Assets/Scenes/WinScreen.unity
-  playerPath: C:/Users/leonl/source/repos/gittest/PAD-2020-2D/PAD 2020 2D/Versions/Version
-    1.0/Waterworks.exe
+  playerPath: C:/Users/danib/Desktop/pad/Waterworks.exe
