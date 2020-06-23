@@ -9,7 +9,7 @@ public class LineToFormula : MonoBehaviour {
     private InputField inputField; // inputfield object
 
     // constants
-    private const string BasicFormula = "y = ax + b"; // this is the basic formula used in linear algebra
+    private const string BasicFormula = "ax + b"; // this is the basic formula used in linear algebra
 
     void Awake() {
         inputField = GameObject.Find("FormulaField").GetComponent<InputField>(); // get the object

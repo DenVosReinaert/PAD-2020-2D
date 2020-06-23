@@ -12,14 +12,15 @@ public class ChangeText : MonoBehaviour
     void Start()
     {
         // We say that 0 is our starting text and this can be changed in next en previous text
-        activeText = "Gebruik de formule Y=aX+b om naar het volgende huisje te gaan. De huizen zijn omcirkeld in het geel.";
+        activeText = "Je begint vanaf de pijp waar jij staat Mario.";
 
         allText.Add(0, activeText);
-        allText.Add(1, "Wanneer de richtingscoeffincient bijvoorbeeld 0.5 is dan wordt dit naar beneden afgerond alles erboven wordt naar boven afgerond");
-        allText.Add(2, "Voor de X as kan je de rode lijn op de pijp raadplegen en voor de Y as kan je bovenin aflezen.");
-        allText.Add(3, "Ben je helemaal zeker van je formule? Druk dan op enter om hem te laten controleren");
-        allText.Add(4, "Gebruik de pijltoetsen om naar de volgende huisje te gaan je kunt ook terug om je formule te bekijken!");
-        allText.Add(5, "Als je de formule fout hebt gaat er 1 leven van af. De formule kan fout zijn als je de richtingscoeffiënt of de b fout hebt.");
+        allText.Add(1, "Gebruik de formule Y=aX+b om naar het volgende huisje te gaan. De huizen zijn omcirkeld in het geel.");
+        allText.Add(2, "Wanneer de richtingscoeffincient bijvoorbeeld 0.5 is dan wordt dit naar beneden afgerond alles erboven wordt naar boven afgerond");
+        allText.Add(3, "Voor de X as kan je de rode lijn op de pijp raadplegen en voor de Y as kan je bovenin aflezen.");
+        allText.Add(4, "Ben je helemaal zeker van je formule? Druk dan op enter om hem te laten controleren");
+        allText.Add(5, "Gebruik de pijltoetsen om naar de volgende huisje te gaan je kunt ook terug om je formule te bekijken!");
+        allText.Add(6, "Als je de formule fout hebt gaat er 1 leven van af. De formule kan fout zijn als je de richtingscoeffiënt of de b fout hebt.");
     }
 
     void Update()
@@ -37,7 +38,7 @@ public class ChangeText : MonoBehaviour
             if (allText.TryGetValue(i, out string value))
             {
                 // The value should be the same as active text and may not overwrite our max otherwise it may cauyse an out of bounds
-                if (value.Equals(activeText) && i != 5)
+                if (value.Equals(activeText) && i != 6)
                 {
                     // We now know which text is being displayed and replace it with the next in line
                     if (allText.TryGetValue(i + 1, out string newValue))
