@@ -47,13 +47,15 @@ public class ActiveLineChecker : MonoBehaviour {
         PipeCheck();
         HouseCheck();
         CheckHit();
-        CheckInput();
         HandleStretching();
         bool canRun = true;
-        if (SceneManager.GetActiveScene().name.Equals("TutorialIntro") && !TutorialHelper.levelHasStarted) {
+        if (!TutorialHelper.levelHasStarted) {
             canRun = false;
+            Debug.Log("false");
         }
         if (canRun) {
+            Debug.Log("running");
+            CheckInput();
             if (inputText != GameObject.Find("Formule")) {
                 inputText = GameObject.Find("Formule");
             }
