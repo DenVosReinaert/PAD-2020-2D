@@ -49,7 +49,7 @@ public class ActiveLineChecker : MonoBehaviour {
         CheckHit();
         HandleStretching();
         bool canRun = true;
-        if (!TutorialHelper.levelHasStarted) {
+        if (!TutorialHelper.levelHasStarted && SceneManager.GetActiveScene().name.Equals("TutorialIntro")) {
             canRun = false;
             Debug.Log("false");
         }

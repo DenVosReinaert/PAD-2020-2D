@@ -15,7 +15,6 @@ public class Lives : MonoBehaviour {
     private static float time;
     private static bool canLoseLife;
     public static int life = 5;
-    string sceneName;
 
 
     private void Awake() { 
@@ -25,23 +24,12 @@ public class Lives : MonoBehaviour {
         }       
     }
 
-    private void Start()
-    {
-        Scene currentScene = SceneManager.GetActiveScene();
-        string sceneName = currentScene.name;
-    }
-
     void Update() { // if life = -1 one heart disapears
         if (life < 1) {
-            if (sceneName == "Level")
-            {
+            if (!SceneManager.GetActiveScene().name.Equals("TutorialInfo")) {
                 hearts[0].SetActive(false);
                 SceneManager.LoadScene("LossScreen"); // at 0 lifes lossscreen 
                 ResetLives(); // resets lifes and displayed hearts back to 5 for retry or next game
-            }
-            if (sceneName == "TutorialIntro")
-            {
-                canLoseLife = false;
             }
         } else if (life < 2) {
             hearts[1].SetActive(false);
