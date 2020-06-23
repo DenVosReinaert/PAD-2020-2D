@@ -2357,5 +2357,5 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Shop.unity
   - Assets/Scenes/LossScreen.unity
   - Assets/Scenes/WinScreen.unity
-  playerPath: C:/Users/leonl/source/repos/gittest/PAD-2020-2D/PAD 2020 2D/Versions/Audio
-    mixer test/Waterworks.exe
+  playerPath: C:/Users/leonl/source/repos/gittest/PAD-2020-2D/PAD 2020 2D/Versions/Version
+    1.0/Waterworks.exe
